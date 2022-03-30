@@ -1,3 +1,4 @@
+
 class guessing_game {
     public static void main(String[] args) {
         int guess = 0;
@@ -56,3 +57,4 @@ class guessing_game {
         return hint;
     }
 }
+
