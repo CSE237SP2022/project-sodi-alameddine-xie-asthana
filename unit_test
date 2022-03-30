@@ -15,6 +15,7 @@ public class unit_test {
     @Test
     public void testCheckGuess() {
         MyUnit myUnit = new MyUnit();
+        guessing_game.checkGuess();
         if (guessing_game.answer==guessing_game.guess){
             assertEquals(guessing_game.answer,guessing_game.guess);
         }
