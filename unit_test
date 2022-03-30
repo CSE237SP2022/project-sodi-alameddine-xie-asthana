@@ -30,6 +30,15 @@ public class unit_test {
         }
         
     }
+
+    @Test
+    public void testGenerateHint() {
+        MyUnit myUnit = new MyUnit();
+        Game.GenerateHint();
+        assertTrue(hint,true);
+        }
+    }
+
     }
 }
 
