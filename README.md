@@ -16,3 +16,8 @@ There will be an extra hints feature, with extra hints earned by completing the 
 
 For the next iteration, we intend to implement the ability to choose other difficulties, and if we have the time, the other difficulties themselves. (If we're unable to implement the other difficulties, the same kind of hints from the first difficulty will be used.)
 
+To use:
+In folder, use these commands from terminal.
+javac *.java
+Java Guessing_Game.java
+
