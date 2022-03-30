@@ -24,3 +24,4 @@ javac *.java
 Java Guessing_Game.java
 ```
 
+NOTE: Commits were made during and after the peer review class to meet the standards specified by Professor Shook. This repository reflects those changes.
