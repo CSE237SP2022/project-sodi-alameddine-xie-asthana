@@ -25,3 +25,5 @@ Java Guessing_Game.java
 ```
 
 NOTE: Commits were made during and after the peer review class to meet the standards specified by Professor Shook. This repository reflects those changes. This note was left in the interest of transparency (there are changes in here that Professor Shook might consider not part of iteration 1 because they were committed after the peer review class)
+
+All current changes are part of iteration 2
