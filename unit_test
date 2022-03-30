@@ -8,11 +8,10 @@ public class unit_test {
         guessing_game.generateAnswer();
         assertTrue(guessing_game.generateAnswer>=1);
         assertTrue(guessing_game.generateAnswer<=25);
-    }
-}
 
-public class unit_test {
-    @Test
+
+
+        @Test
     public void testCheckGuess() {
         MyUnit myUnit = new MyUnit();
         guessing_game.checkGuess();
@@ -20,6 +19,17 @@ public class unit_test {
             assertEquals(guessing_game.answer,guessing_game.guess);
         }
         
+    }
+
+    @Test
+    public void testCheckDistance() {
+        MyUnit myUnit = new MyUnit();
+        guessing_game.checkDistance();
+        if (guessing_game.answer==guessing_game.guess){
+            assertEquals(guessing_game.answer,guessing_game.guess);
+        }
+        
+    }
     }
 }
 
