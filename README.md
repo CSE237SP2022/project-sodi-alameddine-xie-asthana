@@ -37,3 +37,10 @@ Points for 1 question = a(attempts taken) • t(time taken)
 Total points = sum(points for each question) • diffMultiplier
 
 diffMultiplier is a preset value based on difficulty
+
+
+
+In order to run this program, do the following inside of the guessinggame folder inside of src:
+
+javac -d . *.java
+java GuessingGame.java
