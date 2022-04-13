@@ -1,9 +1,8 @@
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.io.FileNotFoundException;
+package guessinggame;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLOutput;
 import java.util.*;
 
 import static java.nio.file.StandardOpenOption.APPEND;
@@ -64,7 +63,7 @@ public class Game {
      * @param answer the correct answer (an integer)
      * @return false if the guess was incorrect or true if the guess was correct
      */
-    private boolean checkGuess(int guess, int answer) {
+     boolean checkGuess(int guess, int answer) {
         if (guess == answer){
             System.out.println("That's correct!");
             questionsCorrect[currentQuestion] = true;
@@ -133,7 +132,7 @@ public class Game {
         System.out.println("Your score is: " + score);
 
         String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
-        Path leaderboardFile = Path.of("src/scores.txt");
+        Path leaderboardFile = Path.of("src/guessinggame/scores.txt");
         try {
             Files.writeString(leaderboardFile, leaderboardEntry, CREATE, APPEND);
         } catch(IOException error) {
@@ -165,7 +164,7 @@ public class Game {
         System.exit(Configuration.ExitCodes.GAME_COMPLETE);
     }
 
-    private void generateQuestions() {
+     void generateQuestions() {
         for (int i = 0; i < numberOfQuestions; ++i) {
             Question question = new Question(difficulty);
             questions.add(question);
@@ -177,7 +176,7 @@ public class Game {
      * @param question
      * @return
      */
-    private int[] askQuestion(Question question) {
+     int[] askQuestion(Question question) {
         long timeBeforeQuestion = System.nanoTime();
         System.out.println("Question " + (currentQuestion+1) + ": " + question.text);
         Scanner answerScanner = new Scanner(System.in);
@@ -225,7 +224,7 @@ public class Game {
         return new int[]{guess, nextQuestion};
     }
 
-    private void generateScore() {
+    void generateScore() {
         float totalScore = 0;
         float difficultyMultiplier = (float) DIFFICULTY_MULTIPLIERS.get(difficulty);
         for(int i = 0; i < numberOfQuestions; ++i) {
@@ -239,7 +238,7 @@ public class Game {
         score = (int) (totalScore * difficultyMultiplier);
     }
 
-    private float calculateTimeScore(float seconds) {
+    float calculateTimeScore(float seconds) {
         //UNIT TEST SECONDS POSITIVE
         if(seconds <= 10) {
             return 100F;
@@ -252,7 +251,7 @@ public class Game {
         }
     }
 
-    private float calculateAttemptsScore(int attempts) {
+    float calculateAttemptsScore(int attempts) {
         return 25 + 75F/attempts;
     }
 }

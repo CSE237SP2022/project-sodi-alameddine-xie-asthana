@@ -1,3 +1,5 @@
+package guessinggame;
+
 import java.util.Map;
 import java.util.Random;
 
@@ -13,7 +15,8 @@ public class Question {
     private final Map<Integer, Map<String, Object>> DIFFICULTY_PARAMETERS = Map.ofEntries(
             entry(0, Map.of("Range", 100)),
             entry(1, Map.of("Range", 200)),
-            entry(2, Map.of("AdditionRange", 500, "SubtractionRange", 500, "MultiplicationRange", 25))
+            entry(2, Map.of("AdditionRange", 500, "SubtractionRange", 500, "MultiplicationRange", 25)),
+            entry(3, Map.of("AdditionSubtractionRange", 1750, "MultiplicationRange", 50, "DivisionRange", 25))
     );
 
 
@@ -41,7 +44,8 @@ public class Question {
             //difficulty 0 generates two random positive integers - summand1 and summand2 - and asks for their sum
             case 0: {
                 int range = (int) parameters.get("Range");
-                int summand1 = generateRandomInteger(1, range), summand2 = generateRandomInteger(1, range);
+                int summand1 = generateRandomInteger(1, range);
+                int summand2 = generateRandomInteger(1, range);
                 text = "What is " + summand1 + " + " + summand2 + "?";
                 answer = summand1 + summand2;
                 break;
@@ -105,8 +109,11 @@ public class Question {
                 }
             }
 
+            case 3: {
+
+            }
+
                 // difficulty 3 generates two random integers and asks for their sum, difference, product or quotient
-                // difficulty 3 has much larger ranges, too
 
                 // difficulty 4 generates 3 random integers and asks for some combination of them involving sum, difference, product or quotient
 

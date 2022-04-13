@@ -1,3 +1,5 @@
+package guessinggame;
+
 public class Configuration {
     private Configuration() {}
 
