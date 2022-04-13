@@ -1,4 +1,5 @@
-import java.sql.SQLOutput;
+package guessinggame;
+
 import java.util.Scanner;
 
 public class GuessingGame {
@@ -10,9 +11,8 @@ public class GuessingGame {
         int difficulty = 0;
 
         Scanner nameScanner = new Scanner(System.in);
-        System.out.println("What's your name? Enter one word please");
+        System.out.println("What's your name? Only the first word will be used");
         String name = nameScanner.next();
-        //nameScanner.close();
 
         Player player = new Player(name);
 
@@ -34,7 +34,6 @@ public class GuessingGame {
             }
         }
 
-        //difficultyScanner.close();
 
         Game game = new Game(difficulty, player); //create game object
         game.play();
