@@ -1,9 +1,13 @@
 import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLOutput;
 import java.util.*;
 
+import static java.nio.file.StandardOpenOption.APPEND;
+import static java.nio.file.StandardOpenOption.CREATE;
 import static java.util.Map.entry;
 
 public class Game {
@@ -105,7 +109,7 @@ public class Game {
     }
 
     public void play() {
-        System.out.println("You have chosen difficulty" + difficulty + ". Good Luck!");
+        System.out.println("You have chosen difficulty " + difficulty + ". Good Luck!");
         System.out.println("Enter \"skip\" to skip any question or \"quit\" to end the game");
         System.out.println("Please round all answers to the nearest integer. Only integer answers will be accepted.\n");
         generateQuestions();
@@ -128,9 +132,30 @@ public class Game {
         System.out.println("Congratulations, you finished the game!");
         System.out.println("Your score is: " + score);
 
-        String leaderboardEntry = player.name + " " + score + " " + difficulty;
+        String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
         Path leaderboardFile = Path.of("src/scores.txt");
-        //Files.writeString(leaderboardFile, leaderboardEntry);
+        try {
+            Files.writeString(leaderboardFile, leaderboardEntry, CREATE, APPEND);
+        } catch(IOException error) {
+            System.out.println(error);
+        }
+
+        String leaderboardString = "";
+
+        try {
+            leaderboardString = Files.readString(leaderboardFile);
+        } catch(IOException error) {
+            System.out.println(error);
+        }
+        System.out.println("\nLeaderboard");
+
+        String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
+        String headers = "Name Score Difficulty";
+
+        //Make a pretty, sorted table in the future
+        System.out.println(headers);
+        System.out.println(leaderboardString);
+
 
         System.exit(Configuration.ExitCodes.GAME_COMPLETE);
     }
@@ -180,7 +205,7 @@ public class Game {
                 }
                 else if (stringGuess.equals("quit")) {
                     generateScore();
-                    System.out.println("Game Over. Final score: " + score);
+                    System.out.println("You quit! Game Over");
                     System.exit(Configuration.ExitCodes.PLAYER_QUIT_GAME);
 
                 }

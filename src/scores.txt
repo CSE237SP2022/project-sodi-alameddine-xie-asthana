@@ -1,0 +1,6 @@
+better 37500 1
+nah 0 1
+skip 0 1
+alec 15000 0
+alec 5000 0
+alec 8125 0
