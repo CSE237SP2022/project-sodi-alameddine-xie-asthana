@@ -1,4 +1,4 @@
-# project-sodi-alameddine-xie-asthana
+# Guessing Game
 The goal of this project is to create a math-based guessing game of varying difficulty levels and with math-related hints.
 
 To run the project, _______
