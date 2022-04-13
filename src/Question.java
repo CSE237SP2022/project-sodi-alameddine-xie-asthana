@@ -115,7 +115,7 @@ public class Question {
         return new Object[]{text, answer};
     }
 
-    private int generateRandomInteger(int lowerBound, int upperBound) {
+    public int generateRandomInteger(int lowerBound, int upperBound) {
         Random randomIntGenerator = new Random();
         int returnedInteger = 0;
 
