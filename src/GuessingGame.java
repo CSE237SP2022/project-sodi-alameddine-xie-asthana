@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.util.Scanner;
 
 public class GuessingGame {
@@ -6,7 +7,36 @@ public class GuessingGame {
         int lastGuess = 0;
         boolean play = true;
 
-        Game game = new Game(0); //create game object
+        int difficulty = 0;
+
+        Scanner nameScanner = new Scanner(System.in);
+        System.out.println("What's your name? Enter one word please");
+        String name = nameScanner.next();
+        //nameScanner.close();
+
+        Player player = new Player(name);
+
+
+        Scanner difficultyScanner = new Scanner(System.in);
+        System.out.println("Please choose a difficulty from 0, the easiest, to 6, the hardest (for now - higher difficulties coming soon!)");
+        while(difficultyScanner.hasNext()) {
+            if(difficultyScanner.hasNextInt()) {
+                int chosenDifficulty = difficultyScanner.nextInt();
+                if(chosenDifficulty < 0 || chosenDifficulty > 6) {
+                    System.out.println("Please enter a difficulty between 0 and 6");
+                } else {
+                    difficulty = chosenDifficulty;
+                    break;
+                }
+            } else {
+                difficultyScanner.next();
+                System.out.println("Enter an integer please");
+            }
+        }
+
+        //difficultyScanner.close();
+
+        Game game = new Game(difficulty, player); //create game object
         game.play();
 
 //        String hint = myGame.generateHint();
