@@ -43,4 +43,5 @@ diffMultiplier is a preset value based on difficulty
 In order to run this program, do the following inside of the guessinggame folder inside of src:
 
 javac -d . *.java
+
 java GuessingGame.java
