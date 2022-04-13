@@ -18,7 +18,8 @@ There is primitive multiplayer functionality. You can compete against your frien
 
 For the next iteration, we intend to improve the leaderboard, add new difficulties and create more/better hints
 
-**Here's how scoring works in detail**
+
+**Here's how scoring works in detail:**
 
 points based on attempts taken: 1 attempt taken will reward full 100% of the points. As attempts grows, points are subtracted more quickly at first then slowly. As attempts goes to ∞, 25% points are rewarded. Function a(x) will keep track of this for x ε [1, ∞) ∩ x ε Z
 a(x) = 25 + 75/x
