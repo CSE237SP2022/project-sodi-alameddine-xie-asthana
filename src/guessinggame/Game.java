@@ -154,9 +154,12 @@ public class Game {
         System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
         System.out.println();
 
+
         for (String entry: currentEntries) {
             String[] individualValues = entry.split(" ");
-            System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
+            if (individualValues.length == 3) {
+                System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
+            }
 
         }
 
