@@ -131,37 +131,39 @@ public class Game {
         System.out.println("Congratulations, you finished the game!");
         System.out.println("Your score is: " + score);
 
-        String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
-        Path leaderboardFile = Path.of("src/guessinggame/scores.txt");
         try {
+            String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
+            Path leaderboardFile = Path.of("src/guessinggame/scores.txt");
+
             Files.writeString(leaderboardFile, leaderboardEntry, CREATE, APPEND);
-        } catch(IOException error) {
-            System.out.println(error);
-        }
-
-        String leaderboardString = "";
-
-        try {
-            leaderboardString = Files.readString(leaderboardFile);
-        } catch(IOException error) {
-            System.out.println(error);
-        }
-        System.out.println("\nLeaderboard:");
-
-        String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
-
-        //Make a pretty, sorted table in the future
-        System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
-        System.out.println();
 
 
-        for (String entry: currentEntries) {
-            String[] individualValues = entry.split(" ");
-            if (individualValues.length == 3) {
-                System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
+            String leaderboardString = "";
+
+            try {
+                leaderboardString = Files.readString(leaderboardFile);
+            } catch (IOException error) {
+                System.out.println(error);
             }
+            System.out.println("\nLeaderboard:");
 
-        }
+            String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
+
+            //Make a pretty, sorted table in the future
+            System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
+            System.out.println();
+
+
+            for (String entry : currentEntries) {
+                String[] individualValues = entry.split(" ");
+                if (individualValues.length == 3) {
+                    System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
+                }
+
+            }
+        } catch(IOException ignored) {
+            ;
+    }
 
 
         System.exit(Configuration.ExitCodes.GAME_COMPLETE);
