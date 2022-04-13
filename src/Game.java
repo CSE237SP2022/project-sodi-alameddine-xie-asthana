@@ -64,7 +64,7 @@ public class Game {
      * @param answer the correct answer (an integer)
      * @return false if the guess was incorrect or true if the guess was correct
      */
-    private boolean checkGuess(int guess, int answer) {
+    public boolean checkGuess(int guess, int answer) {
         if (guess == answer){
             System.out.println("That's correct!");
             questionsCorrect[currentQuestion] = true;
@@ -77,18 +77,6 @@ public class Game {
 
         System.out.println("Incorrect guess. You are currently on attempt " + currentAttempt);
         return false;
-    }
-
-    //checkDistance looks at the guess made by the user. If it is closer to the answer than the previous guess, "Warmer." is output. If it's further, "Colder." is output.
-    //If the same thing is guessed twice, "You guessed the same thing twice!" is output.
-    private String checkDistance(int guess, int lastGuess, int answer) {
-        if (Math.abs(guess - answer) < Math.abs(lastGuess - answer)) {
-            return "Warmer.";
-        } else if (Math.abs(guess - answer) > Math.abs(lastGuess - answer)) {
-            return "Colder.";
-        } else {
-            return "You guessed the same thing twice!";
-        }
     }
 
     //generateHint will create a hint to give the player. Very basic as of now for proof of concept. Difficulty functionality will be added later.
@@ -147,14 +135,19 @@ public class Game {
         } catch(IOException error) {
             System.out.println(error);
         }
-        System.out.println("\nLeaderboard");
+        System.out.println("\nLeaderboard:");
 
         String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
-        String headers = "Name Score Difficulty";
 
         //Make a pretty, sorted table in the future
-        System.out.println(headers);
-        System.out.println(leaderboardString);
+        System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
+        System.out.println();
+
+        for (String entry: currentEntries) {
+            String[] individualValues = entry.split(" ");
+            System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
+
+        }
 
 
         System.exit(Configuration.ExitCodes.GAME_COMPLETE);
@@ -234,7 +227,7 @@ public class Game {
         score = (int) (totalScore * difficultyMultiplier);
     }
 
-    private float calculateTimeScore(float seconds) {
+    public float calculateTimeScore(float seconds) {
         //UNIT TEST SECONDS POSITIVE
         if(seconds <= 10) {
             return 100F;
@@ -247,7 +240,7 @@ public class Game {
         }
     }
 
-    private float calculateAttemptsScore(int attempts) {
+    public float calculateAttemptsScore(int attempts) {
         return 25 + 75F/attempts;
     }
 }

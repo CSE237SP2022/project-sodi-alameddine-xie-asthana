@@ -2,4 +2,5 @@
 /project-sodi-alameddine-xie-asthana.iml
 /unit_test
 /.idea/
-/src/scores.txt
+src/scores.txt
+/production/

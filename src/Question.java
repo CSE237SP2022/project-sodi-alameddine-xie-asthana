@@ -13,7 +13,7 @@ public class Question {
     private final Map<Integer, Map<String, Object>> DIFFICULTY_PARAMETERS = Map.ofEntries(
             entry(0, Map.of("Range", 100)),
             entry(1, Map.of("Range", 200)),
-            entry(2, Map.of("AdditionRange", 200, "SubtractionRange", 200, "MultiplicationRange", 20))
+            entry(2, Map.of("AdditionRange", 500, "SubtractionRange", 500, "MultiplicationRange", 25))
     );
 
 
@@ -79,22 +79,43 @@ public class Question {
 
                 // Addition
                 if (operator == 1) {
+                    int range = (int) parameters.get("AdditionRange");
+                    int summand1 = generateRandomInteger(-range, range);
+                    int summand2 = generateRandomInteger(-range, range);
+                    text = "What is " + summand1 + " + " + summand2 + "?";
+                    answer = summand1 + summand2;
                 }
 
                 // Subtraction
                 if (operator == 2) {
+                    int range = (int) parameters.get("SubtractionRange");
+                    int minuend = generateRandomInteger(-range, range);
+                    int subtrahend = generateRandomInteger(-range, range);
+                    text = "What is " + minuend + " - " + subtrahend + "?";
+                    answer = minuend - subtrahend;
                 }
 
                 // Multiplication
                 if (operator == 3) {
+                    int range = (int) parameters.get("MultiplicationRange");
+                    int factor1 = generateRandomInteger(-range, range);
+                    int factor2 = generateRandomInteger(-range, range);
+                    text = "What is " + factor1 + " • " + factor2 + "?";
+                    answer = factor1 * factor2;
                 }
             }
+
+                // difficulty 3 generates two random integers and asks for their sum, difference, product or quotient
+                // difficulty 3 has much larger ranges, too
+
+                // difficulty 4 generates 3 random integers and asks for some combination of them involving sum, difference, product or quotient
+
         }
 
         return new Object[]{text, answer};
     }
 
-    private int generateRandomInteger(int lowerBound, int upperBound) {
+    public int generateRandomInteger(int lowerBound, int upperBound) {
         Random randomIntGenerator = new Random();
         int returnedInteger = 0;
 
