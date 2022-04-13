@@ -1,14 +1,29 @@
 import javax.swing.plaf.synth.SynthOptionPaneUI;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.SQLOutput;
+import java.util.*;
+
+import static java.util.Map.entry;
 
 public class Game {
     //The difficulty parameter sets the difficulty of the game
     public int difficulty;
 
+    //A map containing the score multiplier for each difficulty
+    private final Map<Integer, Number> DIFFICULTY_MULTIPLIERS = Map.ofEntries(
+            entry(0, 0.5F),
+            entry(1, 1.25F),
+            entry(2, 3.25F),
+            entry(3, 10F),
+            entry(4, 25F)
+    );
+
     // The integer parameter score is the user's rounded score for the game
-    public int score = 0;
+    public int score;
+
+    // The user playing this game
+    Player player;
 
     //The number of questions constant sets the number of questions in the game
     public final int numberOfQuestions = Configuration.Hyperparameters.NUMBER_OF_QUESTIONS;
@@ -31,10 +46,12 @@ public class Game {
     private int currentQuestion;
 
     //Constructor for the game class.
-    public Game (int gameDifficulty) {
+    public Game (int gameDifficulty, Player gamePlayer) {
+        score = 0;
         currentAttempt = 1;
         currentQuestion = 0;
         difficulty = gameDifficulty;
+        player = gamePlayer;
     }
 
     /**
@@ -43,15 +60,16 @@ public class Game {
      * @param answer the correct answer (an integer)
      * @return false if the guess was incorrect or true if the guess was correct
      */
-    boolean checkGuess(int guess, int answer) {
-        ++currentAttempt;
+    private boolean checkGuess(int guess, int answer) {
         if (guess == answer){
-            System.out.println("Congratulations! That's correct!");
-            currentAttempt = 1;
+            System.out.println("That's correct!");
             questionsCorrect[currentQuestion] = true;
+            attemptsTaken.add(currentAttempt);
+            currentAttempt = 1;
             ++currentQuestion;
             return true;
         }
+        ++currentAttempt;
 
         System.out.println("Incorrect guess. You are currently on attempt " + currentAttempt);
         return false;
@@ -59,7 +77,7 @@ public class Game {
 
     //checkDistance looks at the guess made by the user. If it is closer to the answer than the previous guess, "Warmer." is output. If it's further, "Colder." is output.
     //If the same thing is guessed twice, "You guessed the same thing twice!" is output.
-    String checkDistance(int guess, int lastGuess, int answer) {
+    private String checkDistance(int guess, int lastGuess, int answer) {
         if (Math.abs(guess - answer) < Math.abs(lastGuess - answer)) {
             return "Warmer.";
         } else if (Math.abs(guess - answer) > Math.abs(lastGuess - answer)) {
@@ -70,7 +88,7 @@ public class Game {
     }
 
     //generateHint will create a hint to give the player. Very basic as of now for proof of concept. Difficulty functionality will be added later.
-    String generateHint(int answer) {
+    private String generateHint(int answer) {
         int way = (int)(Math.random()*2);
         String hint = "";
         if(way == 1){
@@ -86,8 +104,8 @@ public class Game {
         return hint;
     }
 
-    void play() {
-        System.out.println("Welcome to Guessing Game! Good Luck!");
+    public void play() {
+        System.out.println("You have chosen difficulty" + difficulty + ". Good Luck!");
         System.out.println("Enter \"skip\" to skip any question or \"quit\" to end the game");
         System.out.println("Please round all answers to the nearest integer. Only integer answers will be accepted.\n");
         generateQuestions();
@@ -107,10 +125,17 @@ public class Game {
         }
 
         generateScore();
-        System.out.println("Congratulations, you finished the game! Score: " + score);
+        System.out.println("Congratulations, you finished the game!");
+        System.out.println("Your score is: " + score);
+
+        String leaderboardEntry = player.name + " " + score + " " + difficulty;
+        Path leaderboardFile = Path.of("src/scores.txt");
+        //Files.writeString(leaderboardFile, leaderboardEntry);
+
+        System.exit(Configuration.ExitCodes.GAME_COMPLETE);
     }
 
-    void generateQuestions() {
+    private void generateQuestions() {
         for (int i = 0; i < numberOfQuestions; ++i) {
             Question question = new Question(difficulty);
             questions.add(question);
@@ -122,7 +147,8 @@ public class Game {
      * @param question
      * @return
      */
-    int[] askQuestion(Question question) {
+    private int[] askQuestion(Question question) {
+        long timeBeforeQuestion = System.nanoTime();
         System.out.println("Question " + (currentQuestion+1) + ": " + question.text);
         Scanner answerScanner = new Scanner(System.in);
 
@@ -134,16 +160,21 @@ public class Game {
         while(answerScanner.hasNext()) {
             if(answerScanner.hasNextInt()) {
                 guess = answerScanner.nextInt();
+                long timeAfterQuestion = System.nanoTime();
                 if(checkGuess(guess, question.answer)) {
                     nextQuestion = 1;
+                    float secondsTimeDifference = (float) ((timeAfterQuestion-timeBeforeQuestion)/Math.pow(10, 9));
+                    timeTaken.add(secondsTimeDifference);
                     break;
                 }
             } else {
                 String stringGuess = answerScanner.next();
                 if (stringGuess.equals("skip")) {
-                    System.out.println("Question " + (currentQuestion+1) + " skipped");
+                    System.out.println("Question " + (currentQuestion+1) + " skipped\n");
                     ++currentQuestion;
-                    currentAttempt = 0;
+                    currentAttempt = 1;
+                    timeTaken.add(0F);
+                    attemptsTaken.add(0);
                     nextQuestion = 1;
                     break;
                 }
@@ -164,6 +195,34 @@ public class Game {
         return new int[]{guess, nextQuestion};
     }
 
-    void generateScore() {
+    private void generateScore() {
+        float totalScore = 0;
+        float difficultyMultiplier = (float) DIFFICULTY_MULTIPLIERS.get(difficulty);
+        for(int i = 0; i < numberOfQuestions; ++i) {
+            if(questionsCorrect[i]) {
+                float questionScore = calculateAttemptsScore(attemptsTaken.get(i))
+                        * calculateTimeScore(timeTaken.get(i));
+                totalScore += questionScore;
+            }
+        }
+
+        score = (int) (totalScore * difficultyMultiplier);
+    }
+
+    private float calculateTimeScore(float seconds) {
+        //UNIT TEST SECONDS POSITIVE
+        if(seconds <= 10) {
+            return 100F;
+        }
+        else if (seconds > 10 && seconds < 120) {
+            return (float) (100 + Math.pow(10, 5F/6) - Math.pow(seconds, 5F/6));
+        }
+        else {
+            return 50F;
+        }
+    }
+
+    private float calculateAttemptsScore(int attempts) {
+        return 25 + 75F/attempts;
     }
 }
