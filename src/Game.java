@@ -147,14 +147,19 @@ public class Game {
         } catch(IOException error) {
             System.out.println(error);
         }
-        System.out.println("\nLeaderboard");
+        System.out.println("\nLeaderboard:");
 
         String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
-        String headers = "Name Score Difficulty";
 
         //Make a pretty, sorted table in the future
-        System.out.println(headers);
-        System.out.println(leaderboardString);
+        System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
+        System.out.println();
+
+        for (String entry: currentEntries) {
+            String[] individualValues = entry.split(" ");
+            System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
+
+        }
 
 
         System.exit(Configuration.ExitCodes.GAME_COMPLETE);
