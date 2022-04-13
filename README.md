@@ -1,11 +1,23 @@
 # Guessing Game
 The goal of this project is to create a math-based guessing game of varying difficulty levels and with math-related hints.
 
-To run the project, _______
 
-Currently, the game works like this:
+**How To Run Guessing Game**
 
-After running the program, you are asked to type in your name. You are then asked to choose your difficulty level. If difficulty is hard, you might get a problem like cos(π/67), and as you guess, you'll be told "warmer" or "colder" relative to the last guess. Conversely, if the difficulty is easy, you might get a problem like 8+99, with much more revealing hints, such as "the answer is equivalent to 50 + 57."
+To run the project, first download it by clicking the green code button then clicking `Download ZIP` in the dropdown.
+
+Navigate to  `project-sodi-alameddine-xie-asthana/src/guessinggame` using terminal.
+
+Finally, enter the following two statements into your command prompt:
+```
+javac -d . *.java
+
+java GuessingGame.java
+```
+
+**Currently, the game works like this**
+
+After running the program, you are asked to type in your name. You are then asked to choose your difficulty level. If difficulty is hard, you might get a problem like cos(π/67), and in the next iteration, as you guess, you'll be told "warmer" or "colder" relative to the last guess. Conversely, if the difficulty is easy, you might get a problem like 8+99, with much more revealing hints (in the next iteration), such as "the answer is equivalent to 50 + 57."
 As of iteration 2, there are three implemented difficulties, with 0 being the easiest, 1 being in the middle, and 2 harder. In later iterations more difficulties will be added.
 
 There is a points system with higher difficulties offering higher points multipliers. The maximum amount of points will be rewarded for guessing the answer in only one attempt and within ten seconds.
@@ -19,7 +31,7 @@ There is primitive multiplayer functionality. You can compete against your frien
 For the next iteration, we intend to improve the leaderboard, add new difficulties and create more/better hints
 
 
-**Here's how scoring works in detail:**
+**Here's how scoring works in detail**
 
 points based on attempts taken: 1 attempt taken will reward full 100% of the points. As attempts grows, points are subtracted more quickly at first then slowly. As attempts goes to ∞, 25% points are rewarded. Function a(x) will keep track of this for x ε [1, ∞) ∩ x ε Z
 a(x) = 25 + 75/x
