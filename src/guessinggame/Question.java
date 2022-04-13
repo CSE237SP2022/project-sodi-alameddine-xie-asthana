@@ -32,7 +32,7 @@ public class Question {
      * @param difficulty an integer that specifies the difficulty of the question
      * @return an array containing a random question in slot 0 and its answer in slot 1
      */
-    private Object[] generateQuestion(int difficulty) {
+     private Object[] generateQuestion(int difficulty) {
         // Initialize the question text and answer, generateQuestion is what we will return
         text = "";
         answer = 0;
@@ -122,7 +122,7 @@ public class Question {
         return new Object[]{text, answer};
     }
 
-    private int generateRandomInteger(int lowerBound, int upperBound) {
+     int generateRandomInteger(int lowerBound, int upperBound) {
         Random randomIntGenerator = new Random();
         int returnedInteger = 0;
 
