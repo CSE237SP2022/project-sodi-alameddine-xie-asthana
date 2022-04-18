@@ -15,11 +15,11 @@ public class Game {
 
     //A map containing the score multiplier for each difficulty
     private final Map<Integer, Number> DIFFICULTY_MULTIPLIERS = Map.ofEntries(
-            entry(0, 0.5F),
-            entry(1, 1.25F),
-            entry(2, 3.25F),
-            entry(3, 10F),
-            entry(4, 25F)
+            entry(1, 0.5F),
+            entry(2, 1.25F),
+            entry(3, 3.25F),
+            entry(4, 10F),
+            entry(5, 25F)
     );
 
     // The integer parameter score is the user's rounded score for the game

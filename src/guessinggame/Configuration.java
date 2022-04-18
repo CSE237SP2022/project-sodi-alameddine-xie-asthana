@@ -7,7 +7,7 @@ public class Configuration {
         private Hyperparameters() {}
         public static final int NUMBER_OF_QUESTIONS = 5;
         public static final int TIME_LIMIT = 300; //300 seconds = 5 mins
-        public static final int MAX_DIFFICULTY = 3;
+        public static final int MAX_DIFFICULTY = 5;
     }
 
     public static class ExitCodes {

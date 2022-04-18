@@ -14,10 +14,12 @@ public class Question {
     // This way there are no magic numbers and it's easier to modify values for balance
     // Each difficulty (integer) is mapped to another map which contains the names and values of the parameters for that difficulty
     private final Map<Integer, Map<String, Object>> DIFFICULTY_PARAMETERS = Map.ofEntries(
-            entry(0, Map.of("AdditionRange", 100, "LowerBound", 1)),
-            entry(1, Map.of("AdditionRange", 250, "SubtractionRange", 200)),
-            entry(2, Map.of("AdditionRange", 1000, "SubtractionRange", 800, "MultiplicationRange", 25)),
-            entry(3, Map.of("SubtractionRange", 2750, "MultiplicationRange", 50, "DivisionRange", 20))
+            entry(1, Map.of("AdditionRange", 100, "LowerBound", 1)),
+            entry(2, Map.of("AdditionRange", 250, "SubtractionRange", 200)),
+            entry(3, Map.of("AdditionRange", 1000, "SubtractionRange", 800, "MultiplicationRange", 25)),
+            entry(4, Map.of("SubtractionRange", 2750, "MultiplicationRange", 50, "DivisionRange", 20)),
+            entry(5, Map.of("SubtractionRange", 100000, "MultiplicationRange", 100,
+                    "DivisionRange", 40, "ExponentBaseRange", 25, "ExponentPowerRange", 3))
     );
 
 
@@ -78,13 +80,24 @@ public class Question {
         return new Object[]{text, answer};
     }
 
-    //difficulty 0 generates two random positive integers and asks for their sum
-    public Object[] difficulty0(Map<String, Object> parameters) {
+    public Object[] generateExponent(Map<String, Object> parameters) {
+        int baseRange = (int) parameters.get("ExponentBaseRange");
+        int powerRange = (int) parameters.get("ExponentPowerRange");
+        int base = generateRandomInteger(-baseRange, baseRange);
+        int power = generateRandomInteger(2, powerRange);
+        text = "What is (" + base + ")^" + power + "?";
+        int answer = (int) Math.pow(base, power);;
+
+        return new Object[]{text, answer};
+    }
+
+    //difficulty 1 generates two random positive integers and asks for their sum
+    public Object[] difficulty1(Map<String, Object> parameters) {
         return generateAddition(parameters);
     }
 
-    //difficulty 1 introduces subtraction and negative integers
-    public Object[] difficulty1(Map<String, Object> parameters) {
+    //difficulty 2 introduces subtraction and negative integers
+    public Object[] difficulty2(Map<String, Object> parameters) {
         // We randomly choose to ask a question with addition or subtraction
         int operator = generateRandomInteger(1, 2);
         Object[] question = new Object[]{"", 0};
@@ -102,8 +115,8 @@ public class Question {
         return question;
     }
 
-    //difficulty 2 generates two random integers and asks for their sum, difference or product
-    public Object[] difficulty2(Map<String, Object> parameters) {
+    //difficulty 3 generates two random integers and asks for their sum, difference or product
+    public Object[] difficulty3(Map<String, Object> parameters) {
         int operator = generateRandomInteger(1, 3);
         Object[] question = new Object[]{"", 0};
 
@@ -125,22 +138,22 @@ public class Question {
         return question;
     }
 
-    // difficulty 3 generates two random integers and asks for their difference, product or quotient
-    public Object[] difficulty3(Map<String, Object> parameters) {
+    // difficulty 4 generates two random integers and asks for their difference, product or quotient
+    public Object[] difficulty4(Map<String, Object> parameters) {
         int operator = generateRandomInteger(1, 3);
         Object[] question = new Object[]{"", 0};
 
-        // Addition
+        // Subtraction
         if (operator == 1) {
             question = generateSubtraction(parameters);
         }
 
-        // Subtraction
+        // Multiplication
         if (operator == 2) {
             question = generateMultiplication(parameters);
         }
 
-        // Multiplication
+        // Division
         if (operator == 3) {
             question = generateDivision(parameters);
         }
@@ -149,9 +162,37 @@ public class Question {
         return question;
     }
 
-    // difficulty 4 generates two random integers and asks for their sum, difference, product or quotient
+    // difficulty 5 generates two random integers and asks for their difference, product, quotient, or power
+
+    public Object[] difficulty5(Map<String, Object> parameters) {
+        int operator = generateRandomInteger(1, 4);
+        Object[] question = new Object[]{"", 0};
 
 
+
+        // Subtraction
+        if (operator == 1) {
+            question = generateSubtraction(parameters);
+        }
+
+        // Multiplication
+        if (operator == 2) {
+            question = generateMultiplication(parameters);
+        }
+
+        // Division
+        if (operator == 3) {
+            question = generateDivision(parameters);
+        }
+
+        // Exponentiation
+        if(operator == 4) {
+            question = generateExponent(parameters);
+        }
+
+
+        return question;
+    }
 
     /**
      * Returns an array containing a random question in slot 0 and its answer in slot 1
@@ -164,18 +205,16 @@ public class Question {
         Map<String, Object> parameters = DIFFICULTY_PARAMETERS.get(difficulty);
 
         switch(difficulty) {
-            case 0:
-                return difficulty0(parameters);
             case 1:
                 return difficulty1(parameters);
             case 2:
                 return difficulty2(parameters);
             case 3:
                 return difficulty3(parameters);
-
-
-                // difficulty 4 generates 3 random integers and asks for some combination of them involving sum, difference, product or quotient
-
+            case 4:
+                return difficulty4(parameters);
+            case 5:
+                return difficulty5(parameters);
         }
 
         return new Object[]{text, answer};
