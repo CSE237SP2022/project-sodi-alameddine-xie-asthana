@@ -1,8 +1,6 @@
 package guessinggame;
 
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.Random;
 
 import static java.util.Map.entry;
 
@@ -29,87 +27,27 @@ public class Question {
         answer = (int) question[1];
     }
 
-    public Object[] generateAddition(Map<String, Object> parameters) {
-        int summand1 = 0, summand2 = 0;
 
-        int range = (int) parameters.get("AdditionRange");
-        if(parameters.containsKey("LowerBound")) {
-            int lowerBound = (int) parameters.get("LowerBound");
-            summand1 = generateRandomInteger(lowerBound, range);
-            summand2 = generateRandomInteger(lowerBound, range);
-        }
-        else {
-            summand1 = generateRandomInteger(-range, range);
-            summand2 = generateRandomInteger(-range, range);
-        }
-
-        text = "What is " + summand1 + " + " + summand2 + "?";
-        answer = summand1 + summand2;
-
-        return new Object[]{text, answer};
-    }
-
-    public Object[] generateSubtraction(Map<String, Object> parameters) {
-        int range = (int) parameters.get("SubtractionRange");
-        int minuend = generateRandomInteger(-range, range);
-        int subtrahend = generateRandomInteger(-range, range);
-        text = "What is " + minuend + " - " + subtrahend + "?";
-        answer = minuend - subtrahend;
-
-        return new Object[]{text, answer};
-    }
-
-    public Object[] generateMultiplication(Map<String, Object> parameters) {
-        int range = (int) parameters.get("MultiplicationRange");
-        int factor1 = generateRandomInteger(-range, range);
-        int factor2 = generateRandomInteger(-range, range);
-        text = "What is " + factor1 + " • " + factor2 + "?";
-        answer = factor1 * factor2;
-
-        return new Object[]{text, answer};
-    }
-
-    public Object[] generateDivision(Map<String, Object> parameters) {
-        int range = (int) parameters.get("DivisionRange");
-        int quotient = generateRandomInteger(-range, range);
-        int divisor = generateRandomInteger(-range, range);
-        int dividend = divisor*quotient;
-        text = "What is " + dividend + " ÷ " + divisor + "?";
-        answer = quotient;
-
-        return new Object[]{text, answer};
-    }
-
-    public Object[] generateExponent(Map<String, Object> parameters) {
-        int baseRange = (int) parameters.get("ExponentBaseRange");
-        int powerRange = (int) parameters.get("ExponentPowerRange");
-        int base = generateRandomInteger(-baseRange, baseRange);
-        int power = generateRandomInteger(2, powerRange);
-        text = "What is (" + base + ")^" + power + "?";
-        int answer = (int) Math.pow(base, power);;
-
-        return new Object[]{text, answer};
-    }
 
     //difficulty 1 generates two random positive integers and asks for their sum
     public Object[] difficulty1(Map<String, Object> parameters) {
-        return generateAddition(parameters);
+        return QuestionBuilder.generateAddition(parameters);
     }
 
     //difficulty 2 introduces subtraction and negative integers
     public Object[] difficulty2(Map<String, Object> parameters) {
         // We randomly choose to ask a question with addition or subtraction
-        int operator = generateRandomInteger(1, 2);
+        int operator = QuestionBuilder.generateRandomInteger(1, 2);
         Object[] question = new Object[]{"", 0};
 
         //Addition
         if(operator == 1) {
-            question = generateAddition(parameters);
+            question = QuestionBuilder.generateAddition(parameters);
         }
 
         //Subtraction
         else if (operator == 2) {
-            question = generateSubtraction(parameters);
+            question = QuestionBuilder.generateSubtraction(parameters);
         }
 
         return question;
@@ -117,22 +55,22 @@ public class Question {
 
     //difficulty 3 generates two random integers and asks for their sum, difference or product
     public Object[] difficulty3(Map<String, Object> parameters) {
-        int operator = generateRandomInteger(1, 3);
+        int operator = QuestionBuilder.generateRandomInteger(1, 3);
         Object[] question = new Object[]{"", 0};
 
         // Addition
         if (operator == 1) {
-            question = generateAddition(parameters);
+            question = QuestionBuilder.generateAddition(parameters);
         }
 
         // Subtraction
         if (operator == 2) {
-            question = generateSubtraction(parameters);
+            question = QuestionBuilder.generateSubtraction(parameters);
         }
 
         // Multiplication
         if (operator == 3) {
-            question = generateMultiplication(parameters);
+            question = QuestionBuilder.generateMultiplication(parameters);
         }
 
         return question;
@@ -140,22 +78,22 @@ public class Question {
 
     // difficulty 4 generates two random integers and asks for their difference, product or quotient
     public Object[] difficulty4(Map<String, Object> parameters) {
-        int operator = generateRandomInteger(1, 3);
+        int operator = QuestionBuilder.generateRandomInteger(1, 3);
         Object[] question = new Object[]{"", 0};
 
         // Subtraction
         if (operator == 1) {
-            question = generateSubtraction(parameters);
+            question = QuestionBuilder.generateSubtraction(parameters);
         }
 
         // Multiplication
         if (operator == 2) {
-            question = generateMultiplication(parameters);
+            question = QuestionBuilder.generateMultiplication(parameters);
         }
 
         // Division
         if (operator == 3) {
-            question = generateDivision(parameters);
+            question = QuestionBuilder.generateDivision(parameters);
         }
 
 
@@ -165,29 +103,27 @@ public class Question {
     // difficulty 5 generates two random integers and asks for their difference, product, quotient, or power
 
     public Object[] difficulty5(Map<String, Object> parameters) {
-        int operator = generateRandomInteger(1, 4);
+        int operator = QuestionBuilder.generateRandomInteger(1, 4);
         Object[] question = new Object[]{"", 0};
-
-
 
         // Subtraction
         if (operator == 1) {
-            question = generateSubtraction(parameters);
+            question = QuestionBuilder.generateSubtraction(parameters);
         }
 
         // Multiplication
         if (operator == 2) {
-            question = generateMultiplication(parameters);
+            question = QuestionBuilder.generateMultiplication(parameters);
         }
 
         // Division
         if (operator == 3) {
-            question = generateDivision(parameters);
+            question = QuestionBuilder.generateDivision(parameters);
         }
 
         // Exponentiation
         if(operator == 4) {
-            question = generateExponent(parameters);
+            question = QuestionBuilder.generateExponent(parameters);
         }
 
 
@@ -220,14 +156,5 @@ public class Question {
         return new Object[]{text, answer};
     }
 
-     int generateRandomInteger(int lowerBound, int upperBound) {
-        Random randomIntGenerator = new Random();
-        int returnedInteger = 0;
 
-         do {
-             returnedInteger = randomIntGenerator.nextInt(upperBound - lowerBound + 1) + lowerBound;
-         } while (returnedInteger == 0);
-
-        return returnedInteger;
-    }
 }
