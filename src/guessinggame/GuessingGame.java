@@ -18,12 +18,16 @@ public class GuessingGame {
 
 
         Scanner difficultyScanner = new Scanner(System.in);
-        System.out.println("Please choose a difficulty from 0, the easiest, to 2, the hardest (for now - higher difficulties coming soon!)");
+        System.out.println("Please choose a difficulty from 0, the easiest, to "
+                + Configuration.Hyperparameters.MAX_DIFFICULTY
+                + ", the hardest (for now - higher difficulties coming soon!)");
+
         while(difficultyScanner.hasNext()) {
             if(difficultyScanner.hasNextInt()) {
                 int chosenDifficulty = difficultyScanner.nextInt();
-                if(chosenDifficulty < 0 || chosenDifficulty > 2) {
-                    System.out.println("Please enter a difficulty between 0 and 2");
+                if(chosenDifficulty < 0 || chosenDifficulty > Configuration.Hyperparameters.MAX_DIFFICULTY) {
+                    System.out.println("Please enter a difficulty between 0 and "
+                            + Configuration.Hyperparameters.MAX_DIFFICULTY);
                 } else {
                     difficulty = chosenDifficulty;
                     break;
