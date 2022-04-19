@@ -64,9 +64,8 @@ public class QuestionBuilder {
         int divisor = generateRandomInteger(-range, range);
         int dividend = divisor*quotient;
         String text = "What is " + dividend + " ÷ " + divisor + "?";
-        int answer = quotient;
 
-        return new Object[]{text, answer};
+        return new Object[]{text, quotient};
     }
 
     public static Object[] generateExponent(Map<String, Object> parameters) {
@@ -78,5 +77,10 @@ public class QuestionBuilder {
         int answer = (int) Math.pow(base, power);
 
         return new Object[]{text, answer};
+    }
+
+    public static Object[] generatePemdas(Map<String, Object> parameters) {
+
+        return new Object[]{};
     }
 }
