@@ -17,7 +17,9 @@ public class Question {
             entry(3, Map.of("AdditionRange", 1000, "SubtractionRange", 800, "MultiplicationRange", 25)),
             entry(4, Map.of("SubtractionRange", 2750, "MultiplicationRange", 50, "DivisionRange", 20)),
             entry(5, Map.of("SubtractionRange", 100000, "MultiplicationRange", 100,
-                    "DivisionRange", 40, "ExponentBaseRange", 25, "ExponentPowerRange", 3))
+                    "DivisionRange", 40, "ExponentBaseRange", 25, "ExponentPowerRange", 3)),
+            entry(6, Map.of("MultiplicationRange", 250, "DivisionRange", 100,
+                    "ExponentBaseRange", 30, "ExponentPowerRange", 4))
     );
 
 
@@ -106,35 +108,41 @@ public class Question {
         int operator = QuestionBuilder.generateRandomInteger(1, 4);
         Object[] question = new Object[]{"", 0};
 
-        // Subtraction
-        if (operator == 1) {
-            question = QuestionBuilder.generateSubtraction(parameters);
-        }
+        switch(operator) {
+            // Subtraction
+            case 1:
+                question = QuestionBuilder.generateSubtraction(parameters);
+                break;
 
-        // Multiplication
-        if (operator == 2) {
-            question = QuestionBuilder.generateMultiplication(parameters);
-        }
+            // Multiplication
+            case 2:
+                question = QuestionBuilder.generateMultiplication(parameters);
+                break;
 
-        // Division
-        if (operator == 3) {
-            question = QuestionBuilder.generateDivision(parameters);
-        }
+            // Division
+            case 3:
+                question = QuestionBuilder.generateDivision(parameters);
+                break;
 
-        // Exponentiation
-        if(operator == 4) {
-            question = QuestionBuilder.generateExponent(parameters);
+            // Exponentiation
+            case 4:
+                question = QuestionBuilder.generateExponent(parameters);
+                break;
         }
 
 
         return question;
     }
 
+    public Object[] difficulty6(Map<String, Object> parameters) {
+        return QuestionBuilder.generatePemdas(parameters);
+    }
+
     /**
      * Returns an array containing a random question in slot 0 and its answer in slot 1
      * The integer argument difficulty must be provided to generate a question
      * @param difficulty an integer that specifies the difficulty of the question
-     * @return an array containing a random question in slot 0 and its answer in slot 1
+     * @return an array containing a random question (String) in slot 0 and its answer (int) in slot 1
      */
      public Object[] generateQuestion(int difficulty) {
         // parameters is a map of the name and value of the parameters for each difficulty
@@ -151,9 +159,13 @@ public class Question {
                 return difficulty4(parameters);
             case 5:
                 return difficulty5(parameters);
+            case 6:
+                return difficulty6(parameters);
+            default:
+                return new Object[]{"INVALID DIFFICULTY - What is 1+1? :)", 2};
         }
 
-        return new Object[]{text, answer};
+
     }
 
 

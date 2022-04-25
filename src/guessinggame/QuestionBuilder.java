@@ -9,11 +9,12 @@ public class QuestionBuilder {
 
     public static int generateRandomInteger(int lowerBound, int upperBound) {
         Random randomIntGenerator = new Random();
-        int returnedInteger = 0;
+        int returnedInteger = 1;
 
         do {
             returnedInteger = randomIntGenerator.nextInt(upperBound - lowerBound + 1) + lowerBound;
         } while (returnedInteger == 0);
+
 
         return returnedInteger;
     }
@@ -79,8 +80,70 @@ public class QuestionBuilder {
         return new Object[]{text, answer};
     }
 
+    // Generates a question with the following format:
+    // (term1 */ term2) +- (term3 ^ term4)
+    // where */ means multiplication or division and +- means addition or subtraction
     public static Object[] generatePemdas(Map<String, Object> parameters) {
 
-        return new Object[]{};
+        int MultiplicationRange = (int) parameters.get("MultiplicationRange");
+        int DivisionRange = (int) parameters.get("DivisionRange");
+        int baseRange = (int) parameters.get("ExponentBaseRange");
+        int powerRange = (int) parameters.get("ExponentPowerRange");
+
+        int termZeroOperator = generateRandomInteger(1, 2);
+        int intermediateOperator = generateRandomInteger(1, 2);
+
+        //The first subarray stores values from the first parenthetical.
+        // terms[0][0] and terms[0][1] are the two random numbers from the first paranthetical, and terms[0][2] is the result of evaluating num1*num2 or num1/num2
+        // terms[1][0] is the answer to the first paranthetical (so the same value as terms[0][2]), terms[1][1] is the answer to the second paranthetical
+        int[][] terms = new int[][] {
+                new int[3], /*Num1, Num2, Answer*/
+                new int[3], /*Num1, Num2, Answer*/
+        };
+
+        String[] textTerms = new String[2];
+
+        // Term 0 Multiplication
+        if (termZeroOperator == 1) {
+            terms[0][0] = generateRandomInteger(-MultiplicationRange, MultiplicationRange);  // Num1
+            terms[0][1] = generateRandomInteger(-MultiplicationRange, MultiplicationRange);  // Num2
+            terms[0][2] = terms[0][0] * terms[0][1];  // Answer
+
+            textTerms[0] = " • ";
+        }
+
+        // Term 0 Division
+        if (termZeroOperator == 2) {
+            terms[0][1] = generateRandomInteger(-DivisionRange, DivisionRange);  // Num2
+            terms[0][2] = generateRandomInteger(-DivisionRange, DivisionRange);  // Answer
+            terms[0][0] = terms[0][1] * terms[0][2];  // Num1
+
+            textTerms[0] = " ÷ ";
+        }
+
+        // Term 1 (second term)
+        int base = generateRandomInteger(-baseRange, baseRange);
+        int power = generateRandomInteger(2, powerRange);
+
+        terms[1][0] = terms[0][2];
+        terms[1][1] = (int) Math.pow(base, power);
+
+        // Intermediate Operator Addition
+        if(intermediateOperator == 1) {
+            textTerms[1] = " + ";
+            terms[1][2] = terms[1][0] + terms[1][1];
+        }
+
+        // Intermediate Operator Subtraction
+        if(intermediateOperator == 2) {
+            textTerms[1] = " - ";
+            terms[1][2] = terms[1][0] - terms[1][1];
+        }
+
+
+        String text = "What is ((" + terms[0][0] + ")" + textTerms[0] + "(" + terms[0][1] + "))"
+                +textTerms[1] + "((" + base + ")^" +power + ")?";
+        int answer = terms[1][2];
+        return new Object[]{text, answer};
     }
 }

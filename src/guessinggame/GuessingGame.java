@@ -19,8 +19,7 @@ public class GuessingGame {
 
         Scanner difficultyScanner = new Scanner(System.in);
         System.out.println("Please choose a difficulty from 1, the easiest, to "
-                + Configuration.Hyperparameters.MAX_DIFFICULTY
-                + ", the hardest (for now - higher difficulties coming soon!)");
+                + Configuration.Hyperparameters.MAX_DIFFICULTY + ", the hardest");
 
         while(difficultyScanner.hasNext()) {
             if(difficultyScanner.hasNextInt()) {
