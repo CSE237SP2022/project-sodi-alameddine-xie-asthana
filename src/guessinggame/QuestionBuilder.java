@@ -185,8 +185,8 @@ public class QuestionBuilder {
         };
 
         String[] textTerms = new String[2];
-
         Object[] pemdasQuestionComponents = generateAndCombinePemdasTerms(parameters, terms, textTerms);
+
         terms = (int[][]) pemdasQuestionComponents[0];
         textTerms = (String[]) pemdasQuestionComponents[1];
         int base = (int) pemdasQuestionComponents[2];
@@ -199,111 +199,82 @@ public class QuestionBuilder {
 
     //difficulty 1 generates two random positive integers and asks for their sum
     public static Object[] generateTrivial(Map<String, Object> parameters) {
-        return QuestionBuilder.generateAddition(parameters);
+        return generateAddition(parameters);
     }
 
     //difficulty 2 introduces subtraction and negative integers
     public static Object[] generateEasy(Map<String, Object> parameters) {
         // We randomly choose to ask a question with addition or subtraction
         int operator = QuestionBuilder.generateRandomInteger(1, 2);
-        Object[] question = new Object[]{"", 0};
-
-        //Addition
-        if(operator == 1) {
-            question = QuestionBuilder.generateAddition(parameters);
-        }
-
-        //Subtraction
-        else if (operator == 2) {
-            question = QuestionBuilder.generateSubtraction(parameters);
-        }
-
-        return question;
+        return generateDifficulty(parameters, operator, 2);
     }
 
     //difficulty 3 generates two random integers and asks for their sum, difference or product
     public static Object[] generateMedium(Map<String, Object> parameters) {
-        int operator = QuestionBuilder.generateRandomInteger(1, 3);
-        Object[] question = new Object[]{"", 0};
-
-        // Addition
-        if (operator == 1) {
-            question = QuestionBuilder.generateAddition(parameters);
-        }
-
-        // Subtraction
-        if (operator == 2) {
-            question = QuestionBuilder.generateSubtraction(parameters);
-        }
-
-        // Multiplication
-        if (operator == 3) {
-            question = QuestionBuilder.generateMultiplication(parameters);
-        }
-
-        return question;
+        int operator = generateRandomInteger(1, 3);
+        return generateDifficulty(parameters, operator, 3);
     }
 
     // difficulty 4 generates two random integers and asks for their difference, product or quotient
     public static Object[] generateHard(Map<String, Object> parameters) {
-        int operator = QuestionBuilder.generateRandomInteger(1, 3);
-        Object[] question = new Object[]{"", 0};
-
-        // Subtraction
-        if (operator == 1) {
-            question = QuestionBuilder.generateSubtraction(parameters);
-        }
-
-        // Multiplication
-        if (operator == 2) {
-            question = QuestionBuilder.generateMultiplication(parameters);
-        }
-
-        // Division
-        if (operator == 3) {
-            question = QuestionBuilder.generateDivision(parameters);
-        }
-
-
-        return question;
+        int operator = generateRandomInteger(1, 3);
+        return generateDifficulty(parameters, operator, 4);
     }
+
+
 
     // difficulty 5 generates two random integers and asks for their difference, product, quotient, or power
 
     public static Object[] generateExpert(Map<String, Object> parameters) {
-        int operator = QuestionBuilder.generateRandomInteger(1, 4);
-        Object[] question = new Object[]{"", 0};
-
-        switch(operator) {
-            // Subtraction
-            case 1:
-                question = QuestionBuilder.generateSubtraction(parameters);
-                break;
-
-            // Multiplication
-            case 2:
-                question = QuestionBuilder.generateMultiplication(parameters);
-                break;
-
-            // Division
-            case 3:
-                question = QuestionBuilder.generateDivision(parameters);
-                break;
-
-            // Exponentiation
-            case 4:
-                question = QuestionBuilder.generateExponent(parameters);
-                break;
-        }
-
-
-        return question;
+        int operator = generateRandomInteger(1, 4);
+        return generateDifficulty(parameters, operator, 5);
     }
 
     // Difficulty 6 (nightmare) generates a question with the following format:
     // (term1 */ term2) +- (term3 ^ term4)
     // where */ means multiplication or division and +- means addition or subtraction
     public static Object[] generateNightmare(Map<String, Object> parameters) {
-        return QuestionBuilder.generatePemdas(parameters);
+        return generatePemdas(parameters);
+    }
+
+    public static Object[] generateDifficulty(Map<String, Object> parameters, int operator, int difficulty) {
+        Object[] question = new Object[]{"", 0};
+
+        switch(operator) {
+            case 1:
+                if (difficulty == 2 || difficulty == 3) {
+                    question = generateAddition(parameters);
+                }
+                if (difficulty == 4 || difficulty == 5) {
+                    question = generateSubtraction(parameters);
+                }
+                break;
+
+            case 2:
+                if (difficulty == 2 || difficulty == 3) {
+                    question = generateSubtraction(parameters);
+                }
+                if (difficulty == 4 || difficulty == 5) {
+                    question = generateMultiplication(parameters);
+                }
+                break;
+
+            case 3:
+                if (difficulty == 3) {
+                    question = generateMultiplication(parameters);
+                }
+                if (difficulty == 4 || difficulty == 5) {
+                    question = generateDivision(parameters);
+                }
+                break;
+
+            // Exponentiation
+            case 4:
+                if (difficulty == 5) {
+                    question = generateExponent(parameters);
+                }
+                break;
+        }
+        return question;
     }
 }
