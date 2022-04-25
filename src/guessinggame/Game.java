@@ -1,5 +1,6 @@
 package guessinggame;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,11 +16,12 @@ public class Game {
 
     //A map containing the score multiplier for each difficulty
     private final Map<Integer, Number> DIFFICULTY_MULTIPLIERS = Map.ofEntries(
-            entry(0, 0.5F),
-            entry(1, 1.25F),
-            entry(2, 3.25F),
-            entry(3, 10F),
-            entry(4, 25F)
+            entry(1, 0.5F),
+            entry(2, 1.25F),
+            entry(3, 3.25F),
+            entry(4, 10F),
+            entry(5, 25F),
+            entry(6, 100F)
     );
 
     // The integer parameter score is the user's rounded score for the game
@@ -122,7 +124,6 @@ public class Game {
             while (nextQuestion == 0) {
                 int[] playerAnswer = askQuestion(question);
                 nextQuestion = playerAnswer[1];
-                int guess = playerAnswer[0];
             }
 
         }
@@ -131,19 +132,26 @@ public class Game {
         System.out.println("Congratulations, you finished the game!");
         System.out.println("Your score is: " + score);
 
+        // The reason for catching errors and ignoring them is that there are scenarios where permissions don't exist to create the file
+        // If the leaderboard file cannot be created, the rest of the program will still work as intended, so we can just alert the user that leaderboard could not be created
         try {
-            String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
-            Path leaderboardFile = Path.of("src/guessinggame/scores.txt");
+            File leaderboardFile = new File("src/guessinggame/scores.txt");
+            leaderboardFile.createNewFile();
 
-            Files.writeString(leaderboardFile, leaderboardEntry, CREATE, APPEND);
+            String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
+            Path leaderboardPath = Path.of("src/guessinggame/scores.txt");
+
+            Files.writeString(leaderboardPath, leaderboardEntry, CREATE, APPEND);
 
 
             String leaderboardString = "";
 
             try {
-                leaderboardString = Files.readString(leaderboardFile);
-            } catch (IOException error) {
-                System.out.println(error);
+                leaderboardString = Files.readString(leaderboardPath);
+            } catch (IOException ignored) {
+                System.out.println("Couldn't read leaderboard file - please make sure this program has write" +
+                        " and read permissions in order to use the leaderboard feature");
+                System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
             }
             System.out.println("\nLeaderboard:");
 
@@ -162,8 +170,10 @@ public class Game {
 
             }
         } catch(IOException ignored) {
-            ;
-    }
+            System.out.println("Couldn't generate leaderboard file. Please make sure this program has write and read" +
+                    " permissions in order to use the leaderboard feature");
+            System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
+        }
 
 
         System.exit(Configuration.ExitCodes.GAME_COMPLETE);
@@ -178,8 +188,8 @@ public class Game {
 
     /**
      *
-     * @param question
-     * @return
+     * @param question question that will be asked, which is an object array containing the String of the question (in position 0) and integer answer (in position 1)
+     * @return an integer array containing the user's answer in position 0 and whether to move on to the next question in position 1 (0 = don't continue, 1 = continue)
      */
      int[] askQuestion(Question question) {
         long timeBeforeQuestion = System.nanoTime();
