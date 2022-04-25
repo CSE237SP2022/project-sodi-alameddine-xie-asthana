@@ -11,11 +11,12 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import static java.util.Map.entry;
 
 public class Game {
-    //The difficulty parameter sets the difficulty of the game
+    // The difficulty parameter sets the difficulty of the game
     public int difficulty;
 
-    //A map containing the score multiplier for each difficulty
-    private final Map<Integer, Number> DIFFICULTY_MULTIPLIERS = Map.ofEntries(
+    // A map containing the score multiplier for each difficulty
+    // Static because each instance of game doesn't need its own difficulty map
+    private static final Map<Integer, Number> DIFFICULTY_MULTIPLIERS = Map.ofEntries(
             entry(1, 0.5F),
             entry(2, 1.25F),
             entry(3, 3.25F),
@@ -23,6 +24,18 @@ public class Game {
             entry(5, 25F),
             entry(6, 100F)
     );
+
+    // A map containing a name for each difficulty
+    // Static because each instance of game doesn't need its own name map
+    static final Map<Integer, String> DIFFICULTY_NAMES = Map.ofEntries(
+            entry(1, "TRIVIAL"),
+            entry(2, "EASY"),
+            entry(3, "MEDIUM"),
+            entry(4, "HARD"),
+            entry(5, "EXPERT"),
+            entry(6, "NIGHTMARE")
+    );
+
 
     // The integer parameter score is the user's rounded score for the game
     public int score;
@@ -57,6 +70,15 @@ public class Game {
         currentQuestion = 0;
         difficulty = gameDifficulty;
         player = gamePlayer;
+    }
+
+    // Function to pretty print the list of difficulties
+    // Method is static as there is no reason for every game object to use this method; it's a method of the game class itself
+    static void prettyPrintDifficulties() {
+        Map<Integer, String> sortedDifficultyNames = new TreeMap<>(DIFFICULTY_NAMES);
+        for (Map.Entry<Integer, String> difficultyLevel: sortedDifficultyNames.entrySet()) {
+            System.out.println(difficultyLevel.getKey() + ". " + difficultyLevel.getValue());
+        }
     }
 
     /**
@@ -110,7 +132,7 @@ public class Game {
     }
 
     public void play() {
-        System.out.println("You have chosen difficulty " + difficulty + ". Good Luck!");
+        System.out.println("You have chosen " + DIFFICULTY_NAMES.get(difficulty) + " difficulty. Good Luck!");
         System.out.println("Enter \"skip\" to skip any question or \"quit\" to end the game");
         System.out.println("Please round all answers to the nearest integer. Only integer answers will be accepted.\n");
         generateQuestions();
@@ -138,7 +160,7 @@ public class Game {
             File leaderboardFile = new File("src/guessinggame/scores.txt");
             leaderboardFile.createNewFile();
 
-            String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
+            String leaderboardEntry = player.name + " " + score + " " + DIFFICULTY_NAMES.get(difficulty) + "\n";
             Path leaderboardPath = Path.of("src/guessinggame/scores.txt");
 
             Files.writeString(leaderboardPath, leaderboardEntry, CREATE, APPEND);
@@ -165,7 +187,7 @@ public class Game {
             for (String entry : currentEntries) {
                 String[] individualValues = entry.split(" ");
                 if (individualValues.length == 3) {
-                    System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
+                    System.out.format("%20s%20s%20s%n", individualValues[0], individualValues[1], individualValues[2]);
                 }
 
             }

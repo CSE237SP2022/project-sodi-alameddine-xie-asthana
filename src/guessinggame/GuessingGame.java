@@ -1,6 +1,8 @@
 package guessinggame;
 
+import java.util.Arrays;
 import java.util.Scanner;
+
 
 public class GuessingGame {
     public static void main(String[] args) {
@@ -18,8 +20,8 @@ public class GuessingGame {
 
 
         Scanner difficultyScanner = new Scanner(System.in);
-        System.out.println("Please choose a difficulty from 1, the easiest, to "
-                + Configuration.Hyperparameters.MAX_DIFFICULTY + ", the hardest");
+        System.out.println("Please choose your difficulty by entering one of the following numbers:");
+        Game.prettyPrintDifficulties();
 
         while(difficultyScanner.hasNext()) {
             if(difficultyScanner.hasNextInt()) {
