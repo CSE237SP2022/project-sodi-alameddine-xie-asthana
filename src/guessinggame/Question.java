@@ -11,7 +11,7 @@ public class Question {
     // difficultyParameters is a map that contains the relevant parameters for each difficulty.
     // This way there are no magic numbers and it's easier to modify values for balance
     // Each difficulty (integer) is mapped to a submap which contains the names and values of the parameters for that difficulty
-    private final Map<Integer, Map<String, Object>> DIFFICULTY_PARAMETERS = Map.ofEntries(
+    public final Map<Integer, Map<String, Object>> DIFFICULTY_PARAMETERS = Map.ofEntries(
             entry(1, Map.of("AdditionRange", 100, "LowerBound", 1)),
             entry(2, Map.of("AdditionRange", 250, "SubtractionRange", 200)),
             entry(3, Map.of("AdditionRange", 2500, "SubtractionRange", 2000, "MultiplicationRange", 25)),
