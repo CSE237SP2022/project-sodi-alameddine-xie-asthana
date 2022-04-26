@@ -173,6 +173,10 @@ class QuestionBuilderTest {
         String[] textTerms = {"+", "-"};
         Object[] test = QuestionBuilder.generateAndCombinePemdasTerms(q.DIFFICULTY_PARAMETERS.get(6), terms, textTerms);
         assertEquals(4, test.length);
+        String[] returnText = (String[])test[1];
+        String text = (String)returnText[0] + (String)returnText[1];
+        System.out.println(text);
+        assertTrue(  (text.contains("•") || text.contains("÷") ) );
     }
 
     @Test
@@ -182,6 +186,8 @@ class QuestionBuilderTest {
 
         Object[] test = QuestionBuilder.generatePemdas(q.DIFFICULTY_PARAMETERS.get(6));
         assertEquals(2, test.length);
+        String text = (String)test[0];
+        assertTrue( ( (text.contains("•") || text.contains("÷")) && (text.contains("-") || text.contains("+")) && text.contains("^") ) );
     }
 
     @Test
@@ -190,6 +196,8 @@ class QuestionBuilderTest {
 
         Object[] test = QuestionBuilder.generateTrivial(q.DIFFICULTY_PARAMETERS.get(1));
         assertEquals(2, test.length);
+        String text = (String)test[0];
+        assertTrue(text.contains("+"));
     }
 
     @Test
@@ -198,6 +206,8 @@ class QuestionBuilderTest {
 
         Object[] test = QuestionBuilder.generateEasy(q.DIFFICULTY_PARAMETERS.get(2));
         assertEquals(2, test.length);
+        String text = (String)test[0];
+        assertTrue((text.contains("+") || text.contains("-") ));
     }
 
     @Test
