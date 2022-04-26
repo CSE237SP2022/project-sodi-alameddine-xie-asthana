@@ -248,7 +248,7 @@ class QuestionBuilderTest {
     //generateDifficulty is used for difficulties 2-5. It returns the text of the generated question and the answer.
     //Each difficulty has a few options for what sort of problem is chosen that is randomly selected.
     @Test
-    void generateDifficulty2Add() {
+    void generateDifficultyTwoAdd() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(2),1, 2);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -256,7 +256,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty2Sub() {
+    void generateDifficultyTwoSub() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(2),2, 2);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -264,7 +264,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty3Add() {
+    void generateDifficultyThreeAdd() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(3),1, 3);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -272,7 +272,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty3Sub() {
+    void generateDifficultyThreeSub() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(3),2, 3);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -280,7 +280,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty3Mult() {
+    void generateDifficultyThreeMult() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(3),3, 3);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -288,7 +288,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty4Sub() {
+    void generateDifficultyFourSub() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(4),1, 4);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -296,7 +296,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty4Mult() {
+    void generateDifficultyFourMult() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(4),2, 4);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -304,7 +304,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty4Div() {
+    void generateDifficultyFourDiv() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(4),3, 4);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -312,7 +312,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty5Sub() {
+    void generateDifficultyFiveSub() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(5),1, 5);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -320,7 +320,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty5Mult() {
+    void generateDifficultyFiveMult() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(5),2, 5);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -328,7 +328,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty5Div() {
+    void generateDifficultyFiveDiv() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(5),3, 5);
         assertEquals(2, test.length);
         String text = (String)test[0];
@@ -336,7 +336,7 @@ class QuestionBuilderTest {
     }
 
     @Test
-    void generateDifficulty5Exp() {
+    void generateDifficultyFiveExp() {
         Object[] test = QuestionBuilder.generateDifficulty(q.DIFFICULTY_PARAMETERS.get(5),4, 5);
         assertEquals(2, test.length);
         String text = (String)test[0];
