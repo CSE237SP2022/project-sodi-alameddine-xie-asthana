@@ -41,13 +41,13 @@ public class Game {
     public int score;
 
     // The user playing this game
-    Player player;
+    private Player player;
 
     //The number of questions constant sets the number of questions in the game
     public final int numberOfQuestions = Configuration.Hyperparameters.NUMBER_OF_QUESTIONS;
 
     //questions is the list of questions that the game will ask
-    private List<Question> questions = new ArrayList<Question>(numberOfQuestions);
+    public List<Question> questions = new ArrayList<Question>(numberOfQuestions);
 
     //timeTaken and attemptsTaken are lists that contain the time taken and attempts taken for each question
     private List<Float> timeTaken = new ArrayList<>(numberOfQuestions);
@@ -102,35 +102,6 @@ public class Game {
         return false;
     }
 
-    //checkDistance looks at the guess made by the user. If it is closer to the answer than the previous guess, "Warmer." is output. If it's further, "Colder." is output.
-    //If the same thing is guessed twice, "You guessed the same thing twice!" is output.
-    private String checkDistance(int guess, int lastGuess, int answer) {
-        if (Math.abs(guess - answer) < Math.abs(lastGuess - answer)) {
-            return "Warmer.";
-        } else if (Math.abs(guess - answer) > Math.abs(lastGuess - answer)) {
-            return "Colder.";
-        } else {
-            return "You guessed the same thing twice!";
-        }
-    }
-
-    //generateHint will create a hint to give the player. Very basic as of now for proof of concept. Difficulty functionality will be added later.
-    private String generateHint(int answer) {
-        int way = (int)(Math.random()*2);
-        String hint = "";
-        if(way == 1){
-            int num1 = (int)(Math.random()*answer + 1);
-            int num2 = answer - num1;
-            hint = "Hint: " + num1 + " + " + num2;
-        }
-        else{
-            int num1 = (int)(Math.random()*100 + answer);
-            int num2 = num1 - answer;
-            hint = "Hint: " + num1 + " - " + num2;
-        }
-        return hint;
-    }
-
     public void play() {
         System.out.println("You have chosen " + DIFFICULTY_NAMES.get(difficulty) + " difficulty. Good Luck!");
         System.out.println("Enter \"skip\" to skip any question or \"quit\" to end the game");
@@ -154,6 +125,10 @@ public class Game {
         System.out.println("Congratulations, you finished the game!");
         System.out.println("Your score is: " + score);
 
+        generateLeaderboard();
+    }
+
+    void generateLeaderboard(){
         // The reason for catching errors and ignoring them is that there are scenarios where permissions don't exist to create the file
         // If the leaderboard file cannot be created, the rest of the program will still work as intended, so we can just alert the user that leaderboard could not be created
         try {
@@ -196,7 +171,6 @@ public class Game {
                     " permissions in order to use the leaderboard feature");
             System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
         }
-
 
         System.exit(Configuration.ExitCodes.GAME_COMPLETE);
     }

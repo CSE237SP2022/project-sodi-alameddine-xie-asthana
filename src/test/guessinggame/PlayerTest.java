@@ -8,10 +8,9 @@ class PlayerTest {
 
     @Test
     void testName() {
-        //Difficulty should be the same as when generated
+        //Username stored should be the same as what is input
 
         Player player = new Player("Test");
-
         assertEquals("Test", player.name);
     }
 

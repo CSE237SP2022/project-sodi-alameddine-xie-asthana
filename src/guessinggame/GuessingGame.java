@@ -1,14 +1,10 @@
 package guessinggame;
 
-import java.util.Arrays;
 import java.util.Scanner;
 
 
 public class GuessingGame {
     public static void main(String[] args) {
-        int guess = 0;
-        int lastGuess = 0;
-        boolean play = true;
 
         int difficulty = 0;
 
