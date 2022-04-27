@@ -1,40 +1,51 @@
 # Guessing Game
-The goal of this project is to create a math-based guessing game of varying difficulty levels and with math-related hints.
+A math-based guessing game of varying difficulty levels
 
 
 **How To Run Guessing Game**
 
-To run the project, first download it by clicking the green code button then clicking `Download ZIP` in the dropdown.
+To run the project, first download it using git or by clicking the green code button then clicking `Download ZIP` in the dropdown.
 
-Navigate to  `project-sodi-alameddine-xie-asthana/src/guessinggame` using terminal.
+Navigate into the folder you just downloaded, `project-sodi-alameddine-xie-asthana`, using terminal.
 
-Finally, enter the following two statements into your command prompt:
+Finally, enter the following command:
 ```
-javac -d . *.java
-
-java GuessingGame.java
+bash run.sh
 ```
 
-**Currently, the game works like this**
+**How The Game Works**
 
-After running the program, you are asked to type in your name. You are then asked to choose your difficulty level. If difficulty is hard, you might get a problem like cos(π/67), and in the next iteration, as you guess, you'll be told "warmer" or "colder" relative to the last guess. Conversely, if the difficulty is easy, you might get a problem like 8+99, with much more revealing hints (in the next iteration), such as "the answer is equivalent to 50 + 57."
-As of iteration 2, there are three implemented difficulties, with 0 being the easiest, 1 being in the middle, and 2 harder. In later iterations more difficulties will be added.
+After running the program, you are asked to type in your name. You are then asked to choose your difficulty level. If difficulty is hard, you might get a problem involving division and exponents. Conversely, if the difficulty is easy, you might get a problem like 8+99
+
+There are 6 difficulties to choose from:
+* Trivial
+* Easy
+* Medium
+* Hard
+* Expert
+* Nightmare
+
+If you fancy yourself good at math, give Nightmare a shot! 
+
+Otherwise, if math is the bane of your existence, you should be just fine with trivial.
+
+**Scoring**
 
 There is a points system with higher difficulties offering higher points multipliers. The maximum amount of points will be rewarded for guessing the answer in only one attempt and within ten seconds.
 
 For a detailed explanation of the scoring system, see below
 
-There is a "leaderboard" file that keeps a record of every game ever played along with the user who played it. This local leaderboard keeps track of scores and difficulties too.
+There is a leaderboard file that keeps a record of every game ever played along with the user who played it. This local leaderboard keeps track of scores and difficulties too.
 
 There is primitive multiplayer functionality. You can compete against your friends using the leaderboard.
 
-For the next iteration, we intend to improve the leaderboard, add new difficulties and create more/better hints
 
-
-**Here's how scoring works in detail**
+**How Scoring Works**
 
 points based on attempts taken: 1 attempt taken will reward full 100% of the points. As attempts grows, points are subtracted more quickly at first then slowly. As attempts goes to ∞, 25% points are rewarded. Function a(x) will keep track of this for x ε [1, ∞) ∩ x ε Z
+
 a(x) = 25 + 75/x
+
 <img width="713" alt="Screen Shot 2022-04-10 at 6 26 15 PM" src="https://user-images.githubusercontent.com/7902589/162644417-56bb8c18-d529-4cd6-8f28-2306bcb7db6f.png">
 
 
@@ -49,11 +60,3 @@ Points for 1 question = a(attempts taken) • t(time taken)
 Total points = sum(points for each question) • diffMultiplier
 
 diffMultiplier is a preset value based on difficulty
-
-
-
-In order to run this program, do the following inside of the guessinggame folder inside of src:
-
-javac -d . *.java
-
-java GuessingGame.java
