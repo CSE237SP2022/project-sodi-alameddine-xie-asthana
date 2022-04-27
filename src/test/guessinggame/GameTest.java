@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -147,5 +145,23 @@ class GameTest {
         assertEquals(5, test.questions.size());
     }
 
-    
+    @Test
+    void play() {
+        InputStream sysInBackup = System.in; // backup System.in to restore it later
+        System.setIn(new ByteArrayInputStream("1 skip 1 skip 1 skip 1 skip 1 skip".getBytes()));
+
+        test.play();
+
+        System.setIn(sysInBackup);
+
+        assertEquals(5, test.currentQuestion);
+    }
+
+    @Test
+    void generateLeaderboard() {
+        test.generateLeaderboard();
+        File leaderboardFile = new File("src/guessinggame/scores.txt");
+
+        assertTrue(leaderboardFile.exists());
+    }
 }

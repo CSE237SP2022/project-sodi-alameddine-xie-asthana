@@ -55,13 +55,15 @@ public class Game {
 
     //questionsCorrect is an array of booleans which keeps track of which questions the user answers correctly.
     //If a question is answered correctly, its corresponding index in this array is updated to true
-    private boolean[] questionsCorrect = new boolean[numberOfQuestions];
+    public boolean[] questionsCorrect = new boolean[numberOfQuestions];
 
     //currentAttempts is an integer which stores the attempts taken for the current question
     private int currentAttempt;
 
     //currentQuestion is an integer which stores the question the player is currently on
     public int currentQuestion;
+
+    private Scanner answerScanner;
 
     //Constructor for the game class.
     public Game (int gameDifficulty, Player gamePlayer) {
@@ -103,6 +105,9 @@ public class Game {
     }
 
     public void play() {
+
+         answerScanner = new Scanner(System.in);
+
         System.out.println("You have chosen " + DIFFICULTY_NAMES.get(difficulty) + " difficulty. Good Luck!");
         System.out.println("Enter \"skip\" to skip any question or \"quit\" to end the game");
         System.out.println("Please round all answers to the nearest integer. Only integer answers will be accepted.\n");
@@ -172,7 +177,7 @@ public class Game {
             System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
         }
 
-        System.exit(Configuration.ExitCodes.GAME_COMPLETE);
+        //System.exit(Configuration.ExitCodes.GAME_COMPLETE);
     }
 
      void generateQuestions() {
@@ -190,7 +195,7 @@ public class Game {
      int[] askQuestion(Question question) {
         long timeBeforeQuestion = System.nanoTime();
         System.out.println("Question " + (currentQuestion+1) + ": " + question.text);
-        Scanner answerScanner = new Scanner(System.in);
+
 
         int guess = 0;
 
