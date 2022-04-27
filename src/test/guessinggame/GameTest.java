@@ -3,6 +3,12 @@ package guessinggame;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
@@ -140,4 +146,6 @@ class GameTest {
         test.generateQuestions();
         assertEquals(5, test.questions.size());
     }
+
+    
 }

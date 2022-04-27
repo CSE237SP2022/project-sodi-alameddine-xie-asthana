@@ -61,7 +61,7 @@ public class Game {
     private int currentAttempt;
 
     //currentQuestion is an integer which stores the question the player is currently on
-    private int currentQuestion;
+    public int currentQuestion;
 
     //Constructor for the game class.
     public Game (int gameDifficulty, Player gamePlayer) {
