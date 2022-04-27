@@ -11,11 +11,12 @@ import static java.nio.file.StandardOpenOption.CREATE;
 import static java.util.Map.entry;
 
 public class Game {
-    //The difficulty parameter sets the difficulty of the game
+    // The difficulty parameter sets the difficulty of the game
     public int difficulty;
 
-    //A map containing the score multiplier for each difficulty
-    private final Map<Integer, Number> DIFFICULTY_MULTIPLIERS = Map.ofEntries(
+    // A map containing the score multiplier for each difficulty
+    // Static because each instance of game doesn't need its own difficulty map
+    private static final Map<Integer, Number> DIFFICULTY_MULTIPLIERS = Map.ofEntries(
             entry(1, 0.5F),
             entry(2, 1.25F),
             entry(3, 3.25F),
@@ -24,17 +25,29 @@ public class Game {
             entry(6, 100F)
     );
 
+    // A map containing a name for each difficulty
+    // Static because each instance of game doesn't need its own name map
+    static final Map<Integer, String> DIFFICULTY_NAMES = Map.ofEntries(
+            entry(1, "TRIVIAL"),
+            entry(2, "EASY"),
+            entry(3, "MEDIUM"),
+            entry(4, "HARD"),
+            entry(5, "EXPERT"),
+            entry(6, "NIGHTMARE")
+    );
+
+
     // The integer parameter score is the user's rounded score for the game
     public int score;
 
     // The user playing this game
-    Player player;
+    private Player player;
 
     //The number of questions constant sets the number of questions in the game
     public final int numberOfQuestions = Configuration.Hyperparameters.NUMBER_OF_QUESTIONS;
 
     //questions is the list of questions that the game will ask
-    private List<Question> questions = new ArrayList<Question>(numberOfQuestions);
+    public List<Question> questions = new ArrayList<Question>(numberOfQuestions);
 
     //timeTaken and attemptsTaken are lists that contain the time taken and attempts taken for each question
     private List<Float> timeTaken = new ArrayList<>(numberOfQuestions);
@@ -48,7 +61,9 @@ public class Game {
     private int currentAttempt;
 
     //currentQuestion is an integer which stores the question the player is currently on
-    private int currentQuestion;
+    public int currentQuestion;
+
+    private Scanner answerScanner;
 
     //Constructor for the game class.
     public Game (int gameDifficulty, Player gamePlayer) {
@@ -57,6 +72,15 @@ public class Game {
         currentQuestion = 0;
         difficulty = gameDifficulty;
         player = gamePlayer;
+    }
+
+    // Function to pretty print the list of difficulties
+    // Method is static as there is no reason for every game object to use this method; it's a method of the game class itself
+    static void prettyPrintDifficulties() {
+        Map<Integer, String> sortedDifficultyNames = new TreeMap<>(DIFFICULTY_NAMES);
+        for (Map.Entry<Integer, String> difficultyLevel: sortedDifficultyNames.entrySet()) {
+            System.out.println(difficultyLevel.getKey() + ". " + difficultyLevel.getValue());
+        }
     }
 
     /**
@@ -80,41 +104,12 @@ public class Game {
         return false;
     }
 
-    //checkDistance looks at the guess made by the user. If it is closer to the answer than the previous guess, "Warmer." is output. If it's further, "Colder." is output.
-    //If the same thing is guessed twice, "You guessed the same thing twice!" is output.
-    private String checkDistance(int guess, int lastGuess, int answer) {
-        if (Math.abs(guess - answer) < Math.abs(lastGuess - answer)) {
-            return "Warmer.";
-        } else if (Math.abs(guess - answer) > Math.abs(lastGuess - answer)) {
-            return "Colder.";
-        } else {
-            return "You guessed the same thing twice!";
-        }
-    }
-
-    //generateHint will create a hint to give the player. Very basic as of now for proof of concept. Difficulty functionality will be added later.
-    private String generateHint(int answer) {
-        int way = (int)(Math.random()*2);
-        String hint = "";
-        if(way == 1){
-            int num1 = (int)(Math.random()*answer + 1);
-            int num2 = answer - num1;
-            hint = "Hint: " + num1 + " + " + num2;
-        }
-        else{
-            int num1 = (int)(Math.random()*100 + answer);
-            int num2 = num1 - answer;
-            hint = "Hint: " + num1 + " - " + num2;
-        }
-        return hint;
-    }
-
     public void play() {
-        System.out.println("You have chosen difficulty " + difficulty + ". Good Luck!");
+        answerScanner = new Scanner(System.in);
+        System.out.println("You have chosen " + DIFFICULTY_NAMES.get(difficulty) + " difficulty. Good Luck!");
         System.out.println("Enter \"skip\" to skip any question or \"quit\" to end the game");
         System.out.println("Please round all answers to the nearest integer. Only integer answers will be accepted.\n");
         generateQuestions();
-
 
         for (Question question : questions) {
             // nextQuestion stores whether we should proceed to the next question after the function call terminates
@@ -131,55 +126,58 @@ public class Game {
         generateScore();
         System.out.println("Congratulations, you finished the game!");
         System.out.println("Your score is: " + score);
+        generateLeaderboard();
+    }
 
+    private String generateLeaderboardString(Path leaderboardPath) {
+        try {
+            return Files.readString(leaderboardPath);
+        } catch (IOException ignored) {
+            System.out.println("Couldn't read leaderboard file - please make sure this program has write" +
+                    " and read permissions in order to use the leaderboard feature");
+            System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
+            return "";
+        }
+    }
+
+    private void printLeaderboard(String[] currentEntries) {
+        //Make a pretty, sorted table.
+        System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
+        System.out.println();
+
+        for (String entry : currentEntries) {
+            String[] individualValues = entry.split(" ");
+            if (individualValues.length == 3) {
+                System.out.format("%20s%20s%20s%n", individualValues[0], individualValues[1], individualValues[2]);
+            }
+        }
+    }
+
+    public void generateLeaderboard(){
         // The reason for catching errors and ignoring them is that there are scenarios where permissions don't exist to create the file
         // If the leaderboard file cannot be created, the rest of the program will still work as intended, so we can just alert the user that leaderboard could not be created
         try {
             File leaderboardFile = new File("src/guessinggame/scores.txt");
             leaderboardFile.createNewFile();
 
-            String leaderboardEntry = player.name + " " + score + " " + difficulty + "\n";
+            String leaderboardEntry = player.name + " " + score + " " + DIFFICULTY_NAMES.get(difficulty) + "\n";
             Path leaderboardPath = Path.of("src/guessinggame/scores.txt");
-
             Files.writeString(leaderboardPath, leaderboardEntry, CREATE, APPEND);
 
-
-            String leaderboardString = "";
-
-            try {
-                leaderboardString = Files.readString(leaderboardPath);
-            } catch (IOException ignored) {
-                System.out.println("Couldn't read leaderboard file - please make sure this program has write" +
-                        " and read permissions in order to use the leaderboard feature");
-                System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
-            }
+            String leaderboardString = generateLeaderboardString(leaderboardPath);
             System.out.println("\nLeaderboard:");
 
-            String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
+            String[] currentEntries = leaderboardString.split("\n");  // used for pretty table
+            printLeaderboard(currentEntries);
 
-            //Make a pretty, sorted table in the future
-            System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
-            System.out.println();
-
-
-            for (String entry : currentEntries) {
-                String[] individualValues = entry.split(" ");
-                if (individualValues.length == 3) {
-                    System.out.format("%20s%20s%15s%n", individualValues[0], individualValues[1], individualValues[2]);
-                }
-
-            }
         } catch(IOException ignored) {
             System.out.println("Couldn't generate leaderboard file. Please make sure this program has write and read" +
                     " permissions in order to use the leaderboard feature");
             System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
         }
-
-
-        System.exit(Configuration.ExitCodes.GAME_COMPLETE);
     }
 
-     void generateQuestions() {
+     public void generateQuestions() {
         for (int i = 0; i < numberOfQuestions; ++i) {
             Question question = new Question(difficulty);
             questions.add(question);
@@ -191,11 +189,9 @@ public class Game {
      * @param question question that will be asked, which is an object array containing the String of the question (in position 0) and integer answer (in position 1)
      * @return an integer array containing the user's answer in position 0 and whether to move on to the next question in position 1 (0 = don't continue, 1 = continue)
      */
-     int[] askQuestion(Question question) {
+     private int[] askQuestion(Question question) {
         long timeBeforeQuestion = System.nanoTime();
         System.out.println("Question " + (currentQuestion+1) + ": " + question.text);
-        Scanner answerScanner = new Scanner(System.in);
-
         int guess = 0;
 
         // nextQuestion stores whether we should proceed to the next question after the function call terminates
@@ -214,11 +210,7 @@ public class Game {
             } else {
                 String stringGuess = answerScanner.next();
                 if (stringGuess.equals("skip")) {
-                    System.out.println("Question " + (currentQuestion+1) + " skipped\n");
-                    ++currentQuestion;
-                    currentAttempt = 1;
-                    timeTaken.add(0F);
-                    attemptsTaken.add(0);
+                    skipQuestion();
                     nextQuestion = 1;
                     break;
                 }
@@ -226,20 +218,24 @@ public class Game {
                     generateScore();
                     System.out.println("You quit! Game Over");
                     System.exit(Configuration.ExitCodes.PLAYER_QUIT_GAME);
-
                 }
                 else {
                     System.out.println("Please enter an integer. Only integer answers are accepted.");
                 }
             }
-
         }
-
-
         return new int[]{guess, nextQuestion};
     }
 
-    void generateScore() {
+    private void skipQuestion() {
+        System.out.println("Question " + (currentQuestion+1) + " skipped\n");
+        ++currentQuestion;
+        currentAttempt = 1;
+        timeTaken.add(0F);
+        attemptsTaken.add(0);
+    }
+
+    public void generateScore() {
         float totalScore = 0;
         float difficultyMultiplier = (float) DIFFICULTY_MULTIPLIERS.get(difficulty);
         for(int i = 0; i < numberOfQuestions; ++i) {
@@ -253,7 +249,7 @@ public class Game {
         score = (int) (totalScore * difficultyMultiplier);
     }
 
-    float calculateTimeScore(float seconds) {
+    public float calculateTimeScore(float seconds) {
         //UNIT TEST SECONDS POSITIVE
         if(seconds <= 10) {
             return 100F;
@@ -266,7 +262,7 @@ public class Game {
         }
     }
 
-    float calculateAttemptsScore(int attempts) {
+    public float calculateAttemptsScore(int attempts) {
         return 25 + 75F/attempts;
     }
 }

@@ -2,11 +2,9 @@ package guessinggame;
 
 import java.util.Scanner;
 
+
 public class GuessingGame {
     public static void main(String[] args) {
-        int guess = 0;
-        int lastGuess = 0;
-        boolean play = true;
 
         int difficulty = 0;
 
@@ -18,8 +16,8 @@ public class GuessingGame {
 
 
         Scanner difficultyScanner = new Scanner(System.in);
-        System.out.println("Please choose a difficulty from 1, the easiest, to "
-                + Configuration.Hyperparameters.MAX_DIFFICULTY + ", the hardest");
+        System.out.println("Please choose your difficulty by entering one of the following numbers:");
+        Game.prettyPrintDifficulties();
 
         while(difficultyScanner.hasNext()) {
             if(difficultyScanner.hasNextInt()) {
@@ -40,6 +38,8 @@ public class GuessingGame {
 
         Game game = new Game(difficulty, player); //create game object
         game.play();
+
+        System.exit(Configuration.ExitCodes.GAME_COMPLETE);
 
     }
 }
