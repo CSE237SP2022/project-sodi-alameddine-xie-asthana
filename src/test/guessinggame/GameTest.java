@@ -146,7 +146,7 @@ class GameTest {
     }
 
     @Test
-    void play() {
+    void playSkip() {
         InputStream sysInBackup = System.in; // backup System.in to restore it later
         System.setIn(new ByteArrayInputStream("1 skip 1 skip 1 skip 1 skip 1 skip".getBytes()));
 
@@ -155,6 +155,7 @@ class GameTest {
         System.setIn(sysInBackup);
 
         assertEquals(5, test.currentQuestion);
+        assertEquals(0,test.score);
     }
 
     @Test

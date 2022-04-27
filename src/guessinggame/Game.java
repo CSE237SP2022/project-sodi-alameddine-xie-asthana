@@ -55,7 +55,7 @@ public class Game {
 
     //questionsCorrect is an array of booleans which keeps track of which questions the user answers correctly.
     //If a question is answered correctly, its corresponding index in this array is updated to true
-    public boolean[] questionsCorrect = new boolean[numberOfQuestions];
+    private boolean[] questionsCorrect = new boolean[numberOfQuestions];
 
     //currentAttempts is an integer which stores the attempts taken for the current question
     private int currentAttempt;
@@ -129,7 +129,7 @@ public class Game {
         generateLeaderboard();
     }
 
-    String generateLeaderboardString(Path leaderboardPath) {
+    private String generateLeaderboardString(Path leaderboardPath) {
         try {
             return Files.readString(leaderboardPath);
         } catch (IOException ignored) {
@@ -140,7 +140,7 @@ public class Game {
         }
     }
 
-    void printLeaderboard(String[] currentEntries) {
+    private void printLeaderboard(String[] currentEntries) {
         //Make a pretty, sorted table in the future
         System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
         System.out.println();
@@ -153,7 +153,7 @@ public class Game {
         }
     }
 
-    void generateLeaderboard(){
+    public void generateLeaderboard(){
         // The reason for catching errors and ignoring them is that there are scenarios where permissions don't exist to create the file
         // If the leaderboard file cannot be created, the rest of the program will still work as intended, so we can just alert the user that leaderboard could not be created
         try {
@@ -177,7 +177,7 @@ public class Game {
         }
     }
 
-     void generateQuestions() {
+     public void generateQuestions() {
         for (int i = 0; i < numberOfQuestions; ++i) {
             Question question = new Question(difficulty);
             questions.add(question);
@@ -189,7 +189,7 @@ public class Game {
      * @param question question that will be asked, which is an object array containing the String of the question (in position 0) and integer answer (in position 1)
      * @return an integer array containing the user's answer in position 0 and whether to move on to the next question in position 1 (0 = don't continue, 1 = continue)
      */
-     int[] askQuestion(Question question) {
+     private int[] askQuestion(Question question) {
         long timeBeforeQuestion = System.nanoTime();
         System.out.println("Question " + (currentQuestion+1) + ": " + question.text);
         int guess = 0;
@@ -210,11 +210,7 @@ public class Game {
             } else {
                 String stringGuess = answerScanner.next();
                 if (stringGuess.equals("skip")) {
-                    System.out.println("Question " + (currentQuestion+1) + " skipped\n");
-                    ++currentQuestion;
-                    currentAttempt = 1;
-                    timeTaken.add(0F);
-                    attemptsTaken.add(0);
+                    skipQuestion();
                     nextQuestion = 1;
                     break;
                 }
@@ -231,7 +227,15 @@ public class Game {
         return new int[]{guess, nextQuestion};
     }
 
-    void generateScore() {
+    private void skipQuestion() {
+        System.out.println("Question " + (currentQuestion+1) + " skipped\n");
+        ++currentQuestion;
+        currentAttempt = 1;
+        timeTaken.add(0F);
+        attemptsTaken.add(0);
+    }
+
+    public void generateScore() {
         float totalScore = 0;
         float difficultyMultiplier = (float) DIFFICULTY_MULTIPLIERS.get(difficulty);
         for(int i = 0; i < numberOfQuestions; ++i) {
@@ -245,7 +249,7 @@ public class Game {
         score = (int) (totalScore * difficultyMultiplier);
     }
 
-    float calculateTimeScore(float seconds) {
+    public float calculateTimeScore(float seconds) {
         //UNIT TEST SECONDS POSITIVE
         if(seconds <= 10) {
             return 100F;
@@ -258,7 +262,7 @@ public class Game {
         }
     }
 
-    float calculateAttemptsScore(int attempts) {
+    public float calculateAttemptsScore(int attempts) {
         return 25 + 75F/attempts;
     }
 }
