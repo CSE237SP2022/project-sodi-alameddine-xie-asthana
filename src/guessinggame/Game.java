@@ -167,7 +167,7 @@ public class Game {
             String leaderboardString = generateLeaderboardString(leaderboardPath);
             System.out.println("\nLeaderboard:");
 
-            String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
+            String[] currentEntries = leaderboardString.split("\n");  // used for pretty table
             printLeaderboard(currentEntries);
 
         } catch(IOException ignored) {
