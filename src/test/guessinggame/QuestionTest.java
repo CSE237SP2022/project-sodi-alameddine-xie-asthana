@@ -9,7 +9,7 @@ class QuestionTest {
     private Question test;
 
     @Test
-    void generateQuestionDiffOne() {
+    void testGenerateQuestionDiffOne() {
         //generateDifficulty will return and array with the text of the question at 0 and the int answer at 1
         //Difficulty 1 can only have addition-based questions, so that's all we check for
 
@@ -21,7 +21,7 @@ class QuestionTest {
     }
 
     @Test
-    void generateQuestionDiffTwo() {
+    void testGenerateQuestionDiffTwo() {
         //generateDifficulty will return and array with the text of the question at 0 and the int answer at 1
         //Difficulty 2 can have addition- and subtraction-based questions, so that's what we check for
 
@@ -33,7 +33,7 @@ class QuestionTest {
     }
 
     @Test
-    void generateQuestionDiffThree() {
+    void testGenerateQuestionDiffThree() {
         //generateDifficulty will return and array with the text of the question at 0 and the int answer at 1
         //Difficulty 3 can have addition-, subtraction- and multiplication-based questions, so that's what we check for
 
@@ -45,7 +45,7 @@ class QuestionTest {
     }
 
     @Test
-    void generateQuestionDiffFour() {
+    void testGenerateQuestionDiffFour() {
         //generateDifficulty will return and array with the text of the question at 0 and the int answer at 1
         //Difficulty 4 can have division-, subtraction- and multiplication-based questions, so that's what we check for
 
@@ -57,7 +57,7 @@ class QuestionTest {
     }
 
     @Test
-    void generateQuestionDiffFive() {
+    void testGenerateQuestionDiffFive() {
         //generateDifficulty will return and array with the text of the question at 0 and the int answer at 1
         //Difficulty 5 can have subtraction-, division-, exponent- and multiplication-based questions, so that's what we check for
 
@@ -69,7 +69,7 @@ class QuestionTest {
     }
 
     @Test
-    void generateQuestionDiffSix() {
+    void testGenerateQuestionDiffSix() {
         //generateDifficulty will return and array with the text of the question at 0 and the int answer at 1
         //Difficulty 6 will have subtraction/addition, division/multiplication, and an exponent in the questions, so that's what we check for
 
@@ -81,7 +81,7 @@ class QuestionTest {
     }
 
     @Test
-    void generateQuestionDiffInvalid() {
+    void testGenerateQuestionDiffInvalid() {
         //generateDifficulty will return and array with the text of the question at 0 and the int answer at 1
         //If an invalid difficulty is somehow input, the user is simply prompted by 1+1. The answer should be 2.
 

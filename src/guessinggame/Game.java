@@ -141,7 +141,7 @@ public class Game {
     }
 
     private void printLeaderboard(String[] currentEntries) {
-        //Make a pretty, sorted table in the future
+        //Make a pretty, sorted table.
         System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
         System.out.println();
 

@@ -31,56 +31,56 @@ class GameTest {
     }
 
     @Test
-    void checkCorrectGuess() {
+    void testCheckCorrectGuess() {
         // If the guess is correct, checkGuess should return true.
 
         assertEquals(true, test.checkGuess(10,10));
     }
 
     @Test
-    void checkIncorrectGuess() {
+    void testCheckIncorrectGuess() {
         // If the guess is incorrect, checkGuess should return false.
 
         assertEquals(false, test.checkGuess(10,12));
     }
 
     @Test
-    void calculateTimeScoreUnderTen() {
+    void testCalculateTimeScoreUnderTen() {
         // If it is guessed within ten seconds, the full time score should be awarded.
 
         assertEquals(100F, test.calculateTimeScore(9), 0.001);
     }
 
     @Test
-    void calculateTimeScorePastTwoMinutes() {
+    void testCalculateTimeScorePastTwoMinutes() {
         // If it is guessed past 120 seconds, half of the time score should be awarded.
 
         assertEquals(50F, test.calculateTimeScore(120), 0.001);
     }
 
     @Test
-    void calculateTimeScorePastTen() {
+    void testCalculateTimeScorePastTen() {
         // If it is guessed past 10 seconds and before 120, a lesser time score should be awarded.
 
         assertEquals(97.261F, test.calculateTimeScore(15), 0.001);
     }
 
     @Test
-    void calculateOneAttemptScore() {
+    void testCalculateOneAttemptScore() {
         // If done in one attempt, the full attempt score should be awarded.
 
         assertEquals(100F, test.calculateAttemptsScore(1), 0.001);
     }
 
     @Test
-    void calculateTwoAttemptsScore() {
+    void testCalculateTwoAttemptsScore() {
         // If done in more than 1 attempt, a lesser attempt score should be awarded.
 
         assertEquals(62.5F, test.calculateAttemptsScore(2), 0.001);
     }
 
     @Test
-    void generateZeroScore() {
+    void testGenerateZeroScore() {
         //If none of the questions have been answered yet, the score generated should be zero
 
         test.generateScore();
@@ -88,7 +88,7 @@ class GameTest {
     }
 
     @Test
-    void generateQuestionsDiffOne() {
+    void testGenerateQuestionsDiffOne() {
         //test is a Game of difficulty 1, and 5 questions should be generated
 
         test.generateQuestions();
@@ -96,7 +96,7 @@ class GameTest {
     }
 
     @Test
-    void generateQuestionsDiffTwo() {
+    void testGenerateQuestionsDiffTwo() {
         //test is a Game of difficulty 2, and 5 questions should be generated
 
         test = new Game(2, player);
@@ -106,7 +106,7 @@ class GameTest {
     }
 
     @Test
-    void generateQuestionsDiffThree() {
+    void testGenerateQuestionsDiffThree() {
         //test is a Game of difficulty 3, and 5 questions should be generated
 
         test = new Game(3, player);
@@ -116,7 +116,7 @@ class GameTest {
     }
 
     @Test
-    void generateQuestionsDiffFour() {
+    void testGenerateQuestionsDiffFour() {
         //test is a Game of difficulty 4, and 5 questions should be generated
 
         test = new Game(4, player);
@@ -126,7 +126,7 @@ class GameTest {
     }
 
     @Test
-    void generateQuestionsDiffFive() {
+    void testGenerateQuestionsDiffFive() {
         //test is a Game of difficulty 5, and 5 questions should be generated
 
         test = new Game(5, player);
@@ -136,7 +136,7 @@ class GameTest {
     }
 
     @Test
-    void generateQuestionsDiffSix() {
+    void testGenerateQuestionsDiffSix() {
         //test is a Game of difficulty 6, and 5 questions should be generated
 
         test = new Game(6, player);
@@ -146,7 +146,7 @@ class GameTest {
     }
 
     @Test
-    void playSkip() {
+    void testPlaySkip() {
         InputStream sysInBackup = System.in; // backup System.in to restore it later
         System.setIn(new ByteArrayInputStream("1 skip 1 skip 1 skip 1 skip 1 skip".getBytes()));
 
@@ -159,7 +159,7 @@ class GameTest {
     }
 
     @Test
-    void generateLeaderboard() {
+    void testGenerateLeaderboard() {
         test.generateLeaderboard();
         File leaderboardFile = new File("src/guessinggame/scores.txt");
 
