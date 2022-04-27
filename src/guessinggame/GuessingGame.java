@@ -39,6 +39,8 @@ public class GuessingGame {
         Game game = new Game(difficulty, player); //create game object
         game.play();
 
+        System.exit(Configuration.ExitCodes.GAME_COMPLETE);
+
     }
 }
 

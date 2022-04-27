@@ -105,14 +105,11 @@ public class Game {
     }
 
     public void play() {
-
-         answerScanner = new Scanner(System.in);
-
+        answerScanner = new Scanner(System.in);
         System.out.println("You have chosen " + DIFFICULTY_NAMES.get(difficulty) + " difficulty. Good Luck!");
         System.out.println("Enter \"skip\" to skip any question or \"quit\" to end the game");
         System.out.println("Please round all answers to the nearest integer. Only integer answers will be accepted.\n");
         generateQuestions();
-
 
         for (Question question : questions) {
             // nextQuestion stores whether we should proceed to the next question after the function call terminates
@@ -129,8 +126,31 @@ public class Game {
         generateScore();
         System.out.println("Congratulations, you finished the game!");
         System.out.println("Your score is: " + score);
-
         generateLeaderboard();
+    }
+
+    String generateLeaderboardString(Path leaderboardPath) {
+        try {
+            return Files.readString(leaderboardPath);
+        } catch (IOException ignored) {
+            System.out.println("Couldn't read leaderboard file - please make sure this program has write" +
+                    " and read permissions in order to use the leaderboard feature");
+            System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
+            return "";
+        }
+    }
+
+    void printLeaderboard(String[] currentEntries) {
+        //Make a pretty, sorted table in the future
+        System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
+        System.out.println();
+
+        for (String entry : currentEntries) {
+            String[] individualValues = entry.split(" ");
+            if (individualValues.length == 3) {
+                System.out.format("%20s%20s%20s%n", individualValues[0], individualValues[1], individualValues[2]);
+            }
+        }
     }
 
     void generateLeaderboard(){
@@ -142,42 +162,19 @@ public class Game {
 
             String leaderboardEntry = player.name + " " + score + " " + DIFFICULTY_NAMES.get(difficulty) + "\n";
             Path leaderboardPath = Path.of("src/guessinggame/scores.txt");
-
             Files.writeString(leaderboardPath, leaderboardEntry, CREATE, APPEND);
 
-
-            String leaderboardString = "";
-
-            try {
-                leaderboardString = Files.readString(leaderboardPath);
-            } catch (IOException ignored) {
-                System.out.println("Couldn't read leaderboard file - please make sure this program has write" +
-                        " and read permissions in order to use the leaderboard feature");
-                System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
-            }
+            String leaderboardString = generateLeaderboardString(leaderboardPath);
             System.out.println("\nLeaderboard:");
 
             String[] currentEntries = leaderboardString.split("\n");  // will be used for pretty table
+            printLeaderboard(currentEntries);
 
-            //Make a pretty, sorted table in the future
-            System.out.format("%20s%20s%20s%n", "Name", "Score", "Difficulty");
-            System.out.println();
-
-
-            for (String entry : currentEntries) {
-                String[] individualValues = entry.split(" ");
-                if (individualValues.length == 3) {
-                    System.out.format("%20s%20s%20s%n", individualValues[0], individualValues[1], individualValues[2]);
-                }
-
-            }
         } catch(IOException ignored) {
             System.out.println("Couldn't generate leaderboard file. Please make sure this program has write and read" +
                     " permissions in order to use the leaderboard feature");
             System.exit(Configuration.ExitCodes.GAME_COMPLETE_WITHOUT_LEADERBOARD);
         }
-
-        //System.exit(Configuration.ExitCodes.GAME_COMPLETE);
     }
 
      void generateQuestions() {
@@ -195,8 +192,6 @@ public class Game {
      int[] askQuestion(Question question) {
         long timeBeforeQuestion = System.nanoTime();
         System.out.println("Question " + (currentQuestion+1) + ": " + question.text);
-
-
         int guess = 0;
 
         // nextQuestion stores whether we should proceed to the next question after the function call terminates
@@ -227,16 +222,12 @@ public class Game {
                     generateScore();
                     System.out.println("You quit! Game Over");
                     System.exit(Configuration.ExitCodes.PLAYER_QUIT_GAME);
-
                 }
                 else {
                     System.out.println("Please enter an integer. Only integer answers are accepted.");
                 }
             }
-
         }
-
-
         return new int[]{guess, nextQuestion};
     }
 
